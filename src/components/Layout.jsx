@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
-import { groups } from '../pages/registry.js';
+import config from '../pathway.config.js';
+import { groups } from '../content/registry.js';
 
 function Nav({ current, onNavigate }) {
   return (
@@ -36,10 +37,8 @@ function Nav({ current, onNavigate }) {
 function Wordmark() {
   return (
     <a href="#home" className="block">
-      <span className="block font-display text-[24px] font-semibold leading-[1.05] tracking-[-0.02em] text-ink">
-        Landing Zone Explorer
-      </span>
-      <span className="label mt-1 block">Contoso Bank · learning edition</span>
+      <span className="block font-display text-[24px] font-semibold leading-[1.05] tracking-[-0.02em] text-ink">{config.siteName}</span>
+      <span className="label mt-1 block">{config.edition}</span>
     </a>
   );
 }
@@ -50,11 +49,7 @@ export default function Layout({ current, children }) {
 
   return (
     <div className="min-h-screen bg-paper">
-      {/* Mobile and tablet top bar */}
-      <div
-        className="gutter sticky z-20 flex items-center justify-between border-b border-rule bg-paper py-3 lg:hidden"
-        style={{ top: 'env(safe-area-inset-top, 0px)' }}
-      >
+      <div className="gutter sticky z-20 flex items-center justify-between border-b border-rule bg-paper py-3 lg:hidden" style={{ top: 'env(safe-area-inset-top, 0px)' }}>
         <Wordmark />
         <button
           type="button"
@@ -68,10 +63,7 @@ export default function Layout({ current, children }) {
         </button>
       </div>
       {open && (
-        <div
-          id="mobile-nav"
-          className="gutter border-b border-rule bg-paper py-6 lg:hidden"
-        >
+        <div id="mobile-nav" className="gutter border-b border-rule bg-paper py-6 lg:hidden">
           <Nav current={current} onNavigate={() => setOpen(false)} />
         </div>
       )}
@@ -83,19 +75,14 @@ export default function Layout({ current, children }) {
             <div className="mt-10">
               <Nav current={current} />
             </div>
-            <p className="mt-12 text-[12px] leading-[1.5] text-subtle">
-              Contoso Bank is fictional. Nothing here describes a real organisation's environment.
-            </p>
+            <p className="mt-12 text-[12px] leading-[1.5] text-subtle">{config.orgDisclaimer}</p>
           </div>
         </aside>
 
-        <main
-          className="gutter min-w-0 flex-1 pb-24 pt-10 sm:pt-[72px] lg:px-14"
-        >
+        <main className="gutter min-w-0 flex-1 pb-24 pt-10 sm:pt-[72px] lg:px-14">
           <div className="mx-auto max-w-[1080px] lg:mx-0">{children}</div>
           <p className="mx-auto mt-16 max-w-[1080px] border-t border-faint pt-4 text-[12px] text-subtle lg:mx-0">
-            Landing Zone Explorer · Contoso Bank learning edition · rev 2026.11 · Facts verified against Microsoft and HashiCorp
-            documentation on the dates shown on each page.
+            {config.siteName} · {config.edition} · rev {config.rev} · {config.footer}
           </p>
         </main>
       </div>

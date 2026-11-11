@@ -1,74 +1,47 @@
 import { useEffect, useState } from 'react';
 import Layout from './components/Layout.jsx';
-import { pageById } from './pages/registry.js';
-import Home from './pages/Home.jsx';
-import Journey from './pages/Journey.jsx';
-import Glossary from './pages/Glossary.jsx';
-import DesignAreas from './pages/DesignAreas.jsx';
-import PolicySimulator from './pages/PolicySimulator.jsx';
-import NetworkFlow from './pages/NetworkFlow.jsx';
-import ResourceGroups from './pages/ResourceGroups.jsx';
-import Naming from './pages/Naming.jsx';
-import BuildOptions from './pages/BuildOptions.jsx';
-import Pipeline from './pages/Pipeline.jsx';
-import StateBackends from './pages/StateBackends.jsx';
-import Vending from './pages/Vending.jsx';
-import Brownfield from './pages/Brownfield.jsx';
-import Observability from './pages/Observability.jsx';
-import Guardrails from './pages/Guardrails.jsx';
-import Billing from './pages/Billing.jsx';
-import PavedPaths from './pages/PavedPaths.jsx';
-import LabCost from './pages/LabCost.jsx';
-import Register from './pages/Register.jsx';
+import config from './pathway.config.js';
+import { pageById } from './content/registry.js';
+import Home from './archetypes/Home.jsx';
+import Journey from './archetypes/Journey.jsx';
+import Glossary from './archetypes/Glossary.jsx';
+import Explorer from './archetypes/Explorer.jsx';
+import Sequencer from './archetypes/Sequencer.jsx';
+import Decision from './archetypes/Decision.jsx';
+import Flow from './archetypes/Flow.jsx';
+import Practice from './archetypes/Practice.jsx';
+import Register from './archetypes/Register.jsx';
 
-const components = {
-  home: Home,
-  journey: Journey,
-  glossary: Glossary,
-  'design-areas': DesignAreas,
-  'policy-simulator': PolicySimulator,
-  'network-flow': NetworkFlow,
-  'resource-groups': ResourceGroups,
-  naming: Naming,
-  'build-options': BuildOptions,
-  pipeline: Pipeline,
-  'state-backends': StateBackends,
-  vending: Vending,
-  brownfield: Brownfield,
-  observability: Observability,
-  guardrails: Guardrails,
-  billing: Billing,
-  'paved-paths': PavedPaths,
-  'lab-cost': LabCost,
-  register: Register,
-};
+// Archetype name in the registry -> component that renders it.
+const archetypes = { home: Home, journey: Journey, glossary: Glossary, explorer: Explorer, sequencer: Sequencer, decision: Decision, flow: Flow, practice: Practice, register: Register };
 
 const readHash = () => {
   const id = window.location.hash.replace(/^#\/?/, '');
-  return components[id] ? id : 'home';
+  return pageById[id] ? id : 'home';
 };
 
 export default function App() {
-  const [page, setPage] = useState(readHash);
+  const [id, setId] = useState(readHash);
 
   useEffect(() => {
     const onHash = () => {
-      setPage(readHash());
+      setId(readHash());
       window.scrollTo({ top: 0 });
     };
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
   }, []);
 
+  const page = pageById[id];
   useEffect(() => {
-    const p = pageById[page];
-    document.title = p && page !== 'home' ? `${p.title} · Landing Zone Explorer` : 'Landing Zone Explorer';
-  }, [page]);
+    document.title = id === 'home' ? config.siteName : `${page.title} · ${config.siteName}`;
+  }, [id, page]);
 
-  const Page = components[page];
+  // A custom page brings its own component; everything else is an archetype filled with data.
+  const Page = page.component ?? archetypes[page.archetype];
   return (
-    <Layout current={page}>
-      <Page />
+    <Layout current={id}>
+      <Page page={page} data={page.data} />
     </Layout>
   );
 }

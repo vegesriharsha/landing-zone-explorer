@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Check, X } from 'lucide-react';
-import { PageHeader, Section, Insight, Segmented, Slider, Pill, Sources, Callout, Illustrative } from '../components/ui.jsx';
-import { VERIFIED, src } from '../data/sources.js';
+import { Section, Insight, Segmented, Slider, Pill, Callout, Illustrative } from '../components/ui.jsx';
+import PageShell from '../components/PageShell.jsx';
 import { fmtUSD } from '../lib/hooks.js';
 
 /* ---------- 1. Billing hierarchies ---------- */
@@ -276,19 +276,19 @@ function Commitments() {
 }
 
 export default function Billing() {
+  const header = {
+    eyebrow: "Explorer · Billing and cost",
+    title: "Make the subscription the unit of cost",
+    deck: "How each way of buying Azure is structured, what you can and can’t see under each, and how a steady estate earns its discounts.",
+    meta: [
+      { dt: 'Agreements', dd: 'EA, MCA, CSP' },
+      { dt: 'Cost unit', dd: 'Subscription' },
+      { dt: 'Required tags', dd: '4' },
+    ],
+  };
+
   return (
-    <article>
-      <PageHeader
-        eyebrow="Explorer · Billing and cost"
-        title="Make the subscription the unit of cost"
-        deck="How each way of buying Azure is structured, what you can and can’t see under each, and how a steady estate earns its discounts."
-        meta={[
-          { dt: 'Agreements', dd: 'EA, MCA, CSP' },
-          { dt: 'Cost unit', dd: 'Subscription' },
-          { dt: 'Required tags', dd: '4' },
-          { dt: 'Last verified', dd: VERIFIED },
-        ]}
-      />
+    <PageShell header={header} sources={['cafCsp', 'cafMca', 'cafEa', 'partnerCost', 'costScopes', 'tagInheritance', 'savingsPlan', 'reservationExchange', 'lighthouseCsp', 'finopsAllocation']}>
 
       <Section n={1} title="Who controls what" intro="Pick how you buy Azure and select a level. Dashed levels belong to the partner.">
         <Hierarchy />
@@ -324,8 +324,6 @@ export default function Billing() {
           into one report and roll it up by tag; under CSP and MCA, Cost Management doesn’t offer management-group views.
         </p>
       </Section>
-
-      <Sources verified={VERIFIED} items={[src.cafCsp, src.cafMca, src.cafEa, src.partnerCost, src.costScopes, src.tagInheritance, src.savingsPlan, src.reservationExchange, src.lighthouseCsp, src.finopsAllocation]} />
-    </article>
+    </PageShell>
   );
 }

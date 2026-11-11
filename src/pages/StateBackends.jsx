@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { RotateCcw } from 'lucide-react';
-import { PageHeader, Section, Insight, Segmented, Toggle, Button, Pill, Sources, Callout, Code } from '../components/ui.jsx';
+import { Section, Insight, Segmented, Toggle, Button, Pill, Callout, Code } from '../components/ui.jsx';
+import PageShell from '../components/PageShell.jsx';
 import { useProgress } from '../lib/hooks.js';
-import { VERIFIED, src } from '../data/sources.js';
 
 // Timelines on a 0–100 scale. Each bar: [start, end, kind].
 function timeline(backend, timeout) {
@@ -94,19 +94,19 @@ export default function StateBackends() {
     { v: 43, when: '16:05', note: broken ? 'Bad write: half the resources missing' : 'Budget alerts', ok: !broken },
   ];
 
+  const header = {
+    eyebrow: "Explorer · Terraform state",
+    title: "State is the platform’s memory; guard it",
+    deck: "Terraform remembers what it built in one state file. Run two changes at once, break the file, and see how each backend protects you.",
+    meta: [
+      { dt: 'Accelerator default', dd: 'Azure Storage' },
+      { dt: 'Alternative', dd: 'HCP Terraform' },
+      { dt: 'Supported path', dd: 'Azure Storage' },
+    ],
+  };
+
   return (
-    <article>
-      <PageHeader
-        eyebrow="Explorer · Terraform state"
-        title="State is the platform’s memory; guard it"
-        deck="Terraform remembers what it built in one state file. Run two changes at once, break the file, and see how each backend protects you."
-        meta={[
-          { dt: 'Accelerator default', dd: 'Azure Storage' },
-          { dt: 'Alternative', dd: 'HCP Terraform' },
-          { dt: 'Supported path', dd: 'Azure Storage' },
-          { dt: 'Last verified', dd: VERIFIED },
-        ]}
-      />
+    <PageShell header={header} sources={['azurermBackend', 'bootstrap', 'hcpDynamic', 'hcpOverview', 'hcpPolicy', 'tfeReleases']}>
 
       <Section n={1} title="Two runs at once" intro="Run A starts a change. A moment later run B starts another against the same state. What happens depends on the backend.">
         <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
@@ -326,8 +326,6 @@ export default function StateBackends() {
           </Callout>
         </div>
       </Section>
-
-      <Sources verified={VERIFIED} items={[src.azurermBackend, src.bootstrap, src.hcpDynamic, src.hcpOverview, src.hcpPolicy, src.tfeReleases]} />
-    </article>
+    </PageShell>
   );
 }

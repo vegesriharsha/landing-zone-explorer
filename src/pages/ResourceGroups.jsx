@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Check, Lock, Trash2, UserCog, X, Minus, MoveRight } from 'lucide-react';
-import { PageHeader, Section, Insight, Segmented, Toggle, Button, Pill, Sources, Callout } from '../components/ui.jsx';
-import { VERIFIED, src } from '../data/sources.js';
+import { Section, Insight, Segmented, Toggle, Button, Pill, Callout } from '../components/ui.jsx';
+import PageShell from '../components/PageShell.jsx';
 
 const W = 'loansvc';
 const buckets = [
@@ -153,19 +153,19 @@ export default function ResourceGroups() {
   const selV = selR ? verdict(selR, layout[selR.id]) : null;
   const tray = resources.filter((r) => layout[r.id] === 'tray');
 
+  const header = {
+    eyebrow: "Simulator · Resource groups",
+    title: "Group by what lives and dies together",
+    deck: "Sort a fictional loan-servicing app into resource groups, then stress-test the layout: tear down a release, grant the DBAs access, lock the data.",
+    meta: [
+      { dt: 'Workload', dd: 'Loan servicing (Internal)' },
+      { dt: 'Resources', dd: String(resources.length) },
+      { dt: 'Rule of thumb', dd: 'Shared lifecycle' },
+    ],
+  };
+
   return (
-    <article>
-      <PageHeader
-        eyebrow="Simulator · Resource groups"
-        title="Group by what lives and dies together"
-        deck="Sort a fictional loan-servicing app into resource groups, then stress-test the layout: tear down a release, grant the DBAs access, lock the data."
-        meta={[
-          { dt: 'Workload', dd: 'Loan servicing (Internal)' },
-          { dt: 'Resources', dd: String(resources.length) },
-          { dt: 'Rule of thumb', dd: 'Shared lifecycle' },
-          { dt: 'Last verified', dd: VERIFIED },
-        ]}
-      />
+    <PageShell header={header} sources={['organize', 'naming', 'locks', 'subVending']}>
 
       <Section
         n={1}
@@ -356,8 +356,6 @@ export default function ResourceGroups() {
           </Callout>
         </div>
       </Section>
-
-      <Sources verified={VERIFIED} items={[src.organize, src.naming, src.locks, src.subVending]} />
-    </article>
+    </PageShell>
   );
 }

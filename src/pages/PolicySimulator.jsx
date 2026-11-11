@@ -1,13 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ArrowDown, Ban, Check, CircleSlash, FileWarning, Play, Plus, RotateCcw, Shuffle, Wand2, X } from 'lucide-react';
-import {
-  PageHeader, Section, Insight, Pill, Button, Select, Segmented, Toggle, Code, Panel, Sources, Callout, Prose,
-} from '../components/ui.jsx';
+import { Section, Insight, Pill, Button, Select, Segmented, Toggle, Code, Panel, Callout, Prose } from '../components/ui.jsx';
+import PageShell from '../components/PageShell.jsx';
 import { useReducedMotion } from '../lib/hooks.js';
 import {
   policies, effectTone, actions, mgTree, initialSubs, initialAssignments,
-} from '../data/policies.js';
-import { VERIFIED, src } from '../data/sources.js';
+} from '../content/policies.js';
 
 /* ---------- tree helpers ---------- */
 const parentOf = {};
@@ -333,19 +331,19 @@ export default function PolicySimulator() {
     },
   ];
 
+  const header = {
+    eyebrow: "Simulator · Hierarchy and policy",
+    title: "Policy flows down the tree",
+    deck: "Assign policies to management groups, move subscriptions between them and try deployments. Watch Azure Policy decide, in the order it really evaluates.",
+    meta: [
+      { dt: 'Management groups', dd: String(allMgs.length) },
+      { dt: 'Subscriptions', dd: String(subs.length) },
+      { dt: 'Assignments', dd: String(assignments.length) },
+    ],
+  };
+
   return (
-    <article>
-      <PageHeader
-        eyebrow="Simulator · Hierarchy and policy"
-        title="Policy flows down the tree"
-        deck="Assign policies to management groups, move subscriptions between them and try deployments. Watch Azure Policy decide, in the order it really evaluates."
-        meta={[
-          { dt: 'Management groups', dd: String(allMgs.length) },
-          { dt: 'Subscriptions', dd: String(subs.length) },
-          { dt: 'Assignments', dd: String(assignments.length) },
-          { dt: 'Last verified', dd: VERIFIED },
-        ]}
-      />
+    <PageShell header={header} sources={['policyEffects', 'policyScope', 'policyExemption', 'policyK8s', 'conftest', 'opa', 'alzLibrary']}>
 
       <Section
         n={1}
@@ -550,8 +548,6 @@ export default function PolicySimulator() {
           </Prose>
         </div>
       </Section>
-
-      <Sources verified={VERIFIED} items={[src.policyEffects, src.policyScope, src.policyExemption, src.policyK8s, src.conftest, src.opa, src.alzLibrary]} />
-    </article>
+    </PageShell>
   );
 }

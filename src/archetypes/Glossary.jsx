@@ -1,11 +1,13 @@
 import { useMemo, useState } from 'react';
 import { ArrowRight, Eye, Search } from 'lucide-react';
-import { PageHeader, Section, Segmented, Toggle, Insight, Sources, Pill } from '../components/ui.jsx';
-import { glossary, glossaryCats } from '../data/glossary.js';
-import { VERIFIED, src } from '../data/sources.js';
-import { pageById } from './registry.js';
+import { Section, Segmented, Toggle, Insight, Pill } from '../components/ui.jsx';
+import PageShell from '../components/PageShell.jsx';
+import { pageById } from '../content/registry.js';
 
-export default function Glossary() {
+/** Searchable terms with an optional analogy and a test-yourself mode. */
+export default function Glossary({ data }) {
+  const { terms, analogyLabel = 'Analogy' } = data;
+  const cats = ['All', ...Array.from(new Set(terms.map((t) => t.cat)))];
   const [q, setQ] = useState('');
   const [cat, setCat] = useState('All');
   const [analogy, setAnalogy] = useState(true);
@@ -14,29 +16,13 @@ export default function Glossary() {
 
   const items = useMemo(() => {
     const needle = q.trim().toLowerCase();
-    return glossary.filter(
-      (g) =>
-        (cat === 'All' || g.cat === cat) &&
-        (!needle || g.term.toLowerCase().includes(needle) || g.what.toLowerCase().includes(needle)),
-    );
-  }, [q, cat]);
-
+    return terms.filter((g) => (cat === 'All' || g.cat === cat) && (!needle || g.term.toLowerCase().includes(needle) || g.what.toLowerCase().includes(needle)));
+  }, [q, cat, terms]);
   const seen = Object.values(revealed).filter(Boolean).length;
+  const hasAnalogy = terms.some((t) => t.analogy);
 
   return (
-    <article>
-      <PageHeader
-        eyebrow="Explorer · Glossary"
-        title="Every term, in plain language"
-        deck="Search, filter by area, and switch the house-building analogy on or off. Test yourself by hiding the definitions."
-        meta={[
-          { dt: 'Terms', dd: String(glossary.length) },
-          { dt: 'Areas', dd: String(glossaryCats.length - 1) },
-          { dt: 'Showing', dd: String(items.length) },
-          { dt: 'Last verified', dd: VERIFIED },
-        ]}
-      />
-
+    <PageShell header={data.header} sources={data.sources} verified={data.verified} extraMeta={[{ dt: 'Terms', dd: String(terms.length) }, { dt: 'Showing', dd: String(items.length) }]}>
       <Section n={1} title="Find a term">
         <div className="grid gap-4 lg:grid-cols-[1fr_auto]">
           <div className="min-w-0">
@@ -45,17 +31,11 @@ export default function Glossary() {
             </label>
             <div className="flex items-center gap-2 border border-rule bg-surface px-2">
               <Search size={15} className="text-subtle" />
-              <input
-                id="glossary-search"
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder="Try ‘policy’, ‘peering’ or ‘state’"
-                className="w-full bg-transparent py-1.5 text-[14px] text-ink outline-none"
-              />
+              <input id="glossary-search" value={q} onChange={(e) => setQ(e.target.value)} placeholder={data.placeholder ?? 'Search terms'} className="w-full bg-transparent py-1.5 text-[14px] text-ink outline-none" />
             </div>
           </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:w-[460px]">
-            <Toggle label="House analogy" checked={analogy} onChange={setAnalogy} hint="Show the building comparison" />
+            {hasAnalogy && <Toggle label={analogyLabel} checked={analogy} onChange={setAnalogy} hint="Show the comparison" />}
             <Toggle
               label="Test yourself"
               checked={quiz}
@@ -68,9 +48,8 @@ export default function Glossary() {
           </div>
         </div>
         <div className="mt-4 overflow-x-auto">
-          <Segmented size="sm" value={cat} onChange={setCat} options={glossaryCats.map((c) => ({ value: c, label: c }))} />
+          <Segmented size="sm" value={cat} onChange={setCat} options={cats.map((c) => ({ value: c, label: c }))} />
         </div>
-
         {quiz && (
           <div className="mt-4">
             <Insight title="Test yourself" stateKey={String(seen)}>
@@ -80,7 +59,6 @@ export default function Glossary() {
             </Insight>
           </div>
         )}
-
         <ul className="mt-6 grid gap-px border border-rule bg-rule md:grid-cols-2">
           {items.map((g) => {
             const hidden = quiz && !revealed[g.term];
@@ -102,10 +80,10 @@ export default function Glossary() {
                   ) : (
                     <>
                       <p className="fade-in text-[14.5px] leading-[1.6] text-ink">{g.what}</p>
-                      {analogy && <p className="text-[13.5px] italic leading-[1.5] text-muted">{g.house}</p>}
+                      {analogy && g.analogy && <p className="text-[13.5px] italic leading-[1.5] text-muted">{g.analogy}</p>}
                     </>
                   )}
-                  {g.page && (
+                  {g.page && pageById[g.page] && (
                     <a href={`#${g.page}`} className="mt-auto inline-flex items-center gap-1 pt-1 text-[13px] text-navy hover:underline">
                       Explore: {pageById[g.page].title} <ArrowRight size={12} />
                     </a>
@@ -118,8 +96,6 @@ export default function Glossary() {
         </ul>
         {items.length === 0 && <p className="mt-6 text-[14px] text-muted">No terms match “{q}”. Try a shorter word.</p>}
       </Section>
-
-      <Sources verified={VERIFIED} items={[src.lzOverview, src.policyScope, src.wif, src.avm]} />
-    </article>
+    </PageShell>
   );
 }

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
-import { PageHeader, Section, Insight, Segmented, Slider, Pill, Sources, Callout, Illustrative } from '../components/ui.jsx';
-import { VERIFIED, src } from '../data/sources.js';
-import { logs as price, PRICES_VERIFIED, PRICE_REGION } from '../data/prices.js';
+import { Section, Insight, Segmented, Slider, Pill, Callout, Illustrative } from '../components/ui.jsx';
+import PageShell from '../components/PageShell.jsx';
+import { logs as price, PRICES_VERIFIED, PRICE_REGION } from '../content/prices.js';
 import { fmtUSD } from '../lib/hooks.js';
 
 /* ---------- 1. Telemetry flow ---------- */
@@ -314,19 +314,19 @@ function AlertRouting() {
 }
 
 export default function Observability() {
+  const header = {
+    eyebrow: "Simulator · Observability",
+    title: "Collect on purpose, keep what you need, page the right person",
+    deck: "Follow telemetry from source to workspace, price a log mix across table plans, and route five alerts to the people who should act on them.",
+    meta: [
+      { dt: 'Workspaces', dd: 'Platform + workload' },
+      { dt: 'Table plans', dd: 'Analytics, Basic, Auxiliary' },
+      { dt: 'Prices', dd: `${PRICE_REGION}, list` },
+    ],
+  };
+
   return (
-    <article>
-      <PageHeader
-        eyebrow="Simulator · Observability"
-        title="Collect on purpose, keep what you need, page the right person"
-        deck="Follow telemetry from source to workspace, price a log mix across table plans, and route five alerts to the people who should act on them."
-        meta={[
-          { dt: 'Workspaces', dd: 'Platform + workload' },
-          { dt: 'Table plans', dd: 'Analytics, Basic, Auxiliary' },
-          { dt: 'Prices', dd: `${PRICE_REGION}, list` },
-          { dt: 'Last verified', dd: VERIFIED },
-        ]}
-      />
+    <PageShell header={header} sources={['logsOverview', 'tablePlans', 'retention', 'amba', 'actionGroups', 'amaMigration', 'sentinel', 'retailPrices', 'monitorPricing']}>
 
       <Section n={1} title="Follow the telemetry" intro="Select a source. Policy does most of the wiring, so a new subscription starts logging without anyone remembering to switch it on.">
         <TelemetryFlow />
@@ -348,8 +348,6 @@ export default function Observability() {
           </Callout>
         </div>
       </Section>
-
-      <Sources verified={VERIFIED} items={[src.logsOverview, src.tablePlans, src.retention, src.amba, src.actionGroups, src.amaMigration, src.sentinel, src.retailPrices, src.monitorPricing]} />
-    </article>
+    </PageShell>
   );
 }
