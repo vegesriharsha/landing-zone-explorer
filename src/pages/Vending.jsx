@@ -34,7 +34,7 @@ export default function Vending() {
   const alloc = allocate(size);
   const cidr = alloc ? `10.20.${alloc.start}.0/${size}` : 'pool exhausted';
   const rgs = ['network', 'app', 'data', 'monitor'].map((c) => `rg-${name}-${c}-${env}-${region}`);
-  const workloadType = billing === 'csp' || env === 'prod' || env === 'uat' ? 'Production' : 'DevTest';
+  const workloadType = env === 'prod' || env === 'uat' ? 'Production' : 'DevTest';
 
   const steps = useMemo(
     () => [
@@ -214,7 +214,7 @@ ${rgs.map((r) => `    ${r.split('-')[2]} = { name = "${r}", location = "${region
           <Button onClick={() => setSubmitted((n) => n + 1)}>
             <Send size={14} /> {submitted ? 'Submit again' : 'Submit request'}
           </Button>
-          {billing === 'csp' && env === 'dev' && <Pill tone="gold">CSP: Dev/Test offer unavailable, uses Production</Pill>}
+          {billing === 'csp' && env === 'dev' && <Pill tone="gold">CSP: confirm the Dev/Test offer with your partner</Pill>}
         </div>
       </Section>
 

@@ -200,7 +200,7 @@ export default function NetworkFlow() {
               </text>
 
               {/* route, drawn under the boxes so labels stay readable */}
-              <polyline points={ptsStr} fill="none" stroke={color} strokeWidth="3" strokeOpacity="0.3" className="flowing" />
+              <polyline points={ptsStr} fill="none" stroke={color} strokeWidth="3" strokeOpacity="0.3" strokeDasharray="6 6" strokeDashoffset={-t * 72} />
               <polyline points={ptsStr} fill="none" stroke={color} strokeWidth="1.25" markerEnd={r.status === 'blocked' ? undefined : 'url(#nf-arrow)'} />
 
               <Box x={380} y={14} w={180} h={50} title="Internet" active={on('Internet')} />

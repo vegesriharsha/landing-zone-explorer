@@ -47,11 +47,11 @@ const messages = {
 };
 
 const rows = [
-  ['Where state lives', 'A storage account in your management subscription', 'HashiCorp’s cloud (US by default; an EU region is a separate account)', 'Your own Kubernetes or container hosts'],
+  ['Where state lives', 'A storage account in your management subscription', 'HashiCorp’s cloud (HCP Europe is a separate account)', 'Your own Kubernetes or container hosts'],
   ['Locking', 'Blob lease', 'Run queue per workspace', 'Run queue per workspace'],
   ['History and recovery', 'Blob versioning and soft delete', 'State versions in the workspace', 'State versions in the workspace'],
   ['How runs reach Azure', 'GitHub or Azure DevOps OIDC to managed identities', 'Dynamic provider credentials (OIDC)', 'Dynamic provider credentials (OIDC)'],
-  ['Policy before apply', 'Add Conftest in the pipeline', 'Sentinel or OPA policy sets (full enforcement on Standard and Premium)', 'Sentinel or OPA policy sets'],
+  ['Policy before apply', 'Add Conftest in the pipeline', 'Sentinel or OPA policy sets (Standard and Premium; Free: one set of five policies)', 'Sentinel or OPA policy sets'],
   ['Drift detection', 'Scheduled plan in the pipeline', 'Built in (Standard plan and up)', 'Built in'],
   ['Cost', 'Cents a month for storage', 'Per managed resource per hour', 'Licence plus your hosting'],
   ['ALZ accelerator', 'Default; supported', 'Wire it in yourself; not supported', 'Wire it in yourself; not supported'],

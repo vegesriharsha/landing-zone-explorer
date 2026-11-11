@@ -41,11 +41,11 @@ const trees = {
 const capabilities = [
   { name: 'Create subscriptions', ea: 'Enrollment account owner', mca: 'Invoice section role', csp: 'Partner only; you adopt by ID' },
   { name: 'See costs in the portal', ea: true, mca: true, csp: 'After the partner turns on cost visibility; shown at retail prices' },
-  { name: 'Budgets and cost views at management-group scope', ea: true, mca: 'Not supported; use billing profile or invoice section scopes', csp: false },
+  { name: 'Budgets and cost views at management-group scope', ea: true, mca: 'Not supported; use billing account or billing profile scopes', csp: false },
   { name: 'Budgets per subscription', ea: true, mca: true, csp: true },
   { name: 'Cost allocation rules', ea: true, mca: true, csp: false },
   { name: 'Tag inheritance in Cost Management', ea: true, mca: true, csp: true },
-  { name: 'Dev/Test subscription offer', ea: true, mca: true, csp: false },
+  { name: 'Dev/Test subscription offer', ea: true, mca: true, csp: 'Confirm with your partner' },
   { name: 'Buy reservations and savings plans', ea: true, mca: true, csp: 'Partner buys, or grants you permission per subscription' },
 ];
 
@@ -177,6 +177,20 @@ function Commitments() {
   const y = (v) => pad.t + (1 - v / maxV) * (H - pad.t - pad.b);
   const line = (key) => months.map((m) => `${x(m.i)},${y(m[key])}`).join(' ');
   const h = hover ?? 23;
+  const pick = (i) => setHover(Math.max(0, Math.min(23, i)));
+  // Map a pointer or touch x position to the nearest month.
+  const pickAt = (clientX, el) => {
+    const r = el.getBoundingClientRect();
+    const px = ((clientX - r.left) / r.width) * W;
+    pick(Math.round(((px - pad.l) / (W - pad.l - pad.r)) * 23));
+  };
+  const onKeyDown = (e) => {
+    const step = { ArrowLeft: -1, ArrowRight: 1, Home: -23, End: 23 }[e.key];
+    if (step === undefined) return;
+    e.preventDefault();
+    pick(h + step);
+  };
+  const leftHalf = x(h) < W / 2;
 
   return (
     <>
@@ -218,14 +232,15 @@ function Commitments() {
         <svg
           viewBox={`0 0 ${W} ${H}`}
           className="block w-full"
+          style={{ touchAction: 'pan-y' }}
           role="img"
-          aria-label="Monthly cost, pay as you go against commitment"
+          tabIndex={0}
+          aria-label={`Monthly cost, pay as you go against commitment. Month ${h + 1}: ${fmtUSD(months[h].usage)} pay as you go, ${fmtUSD(months[h].cost)} with commitment. Use the arrow keys to move between months.`}
           onMouseLeave={() => setHover(null)}
-          onMouseMove={(e) => {
-            const r = e.currentTarget.getBoundingClientRect();
-            const px = ((e.clientX - r.left) / r.width) * W;
-            setHover(Math.max(0, Math.min(23, Math.round(((px - pad.l) / (W - pad.l - pad.r)) * 23))));
-          }}
+          onMouseMove={(e) => pickAt(e.clientX, e.currentTarget)}
+          onTouchStart={(e) => pickAt(e.touches[0].clientX, e.currentTarget)}
+          onTouchMove={(e) => pickAt(e.touches[0].clientX, e.currentTarget)}
+          onKeyDown={onKeyDown}
         >
           {[0, 0.25, 0.5, 0.75, 1].map((f) => (
             <g key={f}>
@@ -251,7 +266,10 @@ function Commitments() {
           <circle cx={x(h)} cy={y(months[h].usage)} r={4} fill="var(--subtle)" stroke="var(--surface)" strokeWidth="2" />
           <circle cx={x(h)} cy={y(months[h].cost)} r={4} fill="var(--navy)" stroke="var(--surface)" strokeWidth="2" />
         </svg>
-        <div className="pointer-events-none absolute top-12 border border-rule bg-surface px-2 py-1 text-[12px]" style={{ left: `${Math.min(70, (x(h) / W) * 100)}%` }}>
+        <div
+          className="pointer-events-none absolute top-12 max-w-[55%] border border-rule bg-surface px-2 py-1 text-[12px]"
+          style={leftHalf ? { left: `${(x(h) / W) * 100}%` } : { right: `${100 - (x(h) / W) * 100}%` }}
+        >
           <span className="text-subtle">Month {h + 1} · </span>
           <span className="tabular font-mono text-muted">{fmtUSD(months[h].usage)}</span>
           <span className="text-subtle"> → </span>
@@ -298,7 +316,7 @@ export default function Billing() {
         <Commitments />
         <div className="mt-5">
           <Callout tone="gold" title="Read the terms before you buy">
-            Savings plans can’t be cancelled or exchanged. Reservations bought from 1 February 2027 for services that savings plans
+            Savings plans can’t be cancelled or refunded. Reservations bought after 1 February 2027 for services that savings plans
             cover can’t be exchanged; ones bought before then keep a final exchange. Under CSP, the partner buys or grants permission
             per subscription and sets the price, so confirm the terms with the partner first.
           </Callout>

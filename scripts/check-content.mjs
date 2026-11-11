@@ -61,7 +61,9 @@ if (process.argv.includes('--urls')) {
     }),
   );
   for (const [k, url, status] of results) {
-    if (typeof status !== 'number' || status >= 400) problems.push(`sources.js: '${k}' -> ${status} ${url}`);
+    // 429 is the site rate-limiting the checker, not a broken link.
+    if (status === 429) console.log(`warning: '${k}' rate-limited (429), re-check by hand: ${url}`);
+    else if (typeof status !== 'number' || status >= 400) problems.push(`sources.js: '${k}' -> ${status} ${url}`);
   }
   console.log(`fetched ${results.length} source URLs`);
 }

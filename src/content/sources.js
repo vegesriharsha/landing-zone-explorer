@@ -1,5 +1,5 @@
 // Shared source links. Each page lists the ones it relies on.
-export const VERIFIED = '1 Nov 2026';
+export const VERIFIED = '11 Nov 2026';
 
 export const src = {
   lzOverview: {
