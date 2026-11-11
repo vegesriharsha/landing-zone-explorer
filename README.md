@@ -63,5 +63,7 @@ Microsoft documentation; check the linked sources before relying on any detail.
 
 | Date | Change |
 | --- | --- |
+| 11 Nov 2026 | Independent fact-check applied: ALZ library 2026.11.0, aztfexport 0.21, AzureRM 5.13.0; savings-plan, reservation-exchange, MCA scope, CSP Dev/Test, Log Analytics 31-day retention and free-tier wording corrected; every register entry and all 24 prices re-verified |
+| 11 Nov 2026 | Animation review fixes: no infinite dash animation, alert-routing label wraps instead of truncating, keyboard and touch access on the compliance and commitment charts, lab-cost label kept inside the chart, alert diagram limited to six boxes |
 | 11 Nov 2026 | Rebuilt on the Pathway Kit: archetype pages for journey, glossary, design areas and register; Pipeline and Build options use the Flow and Decision sections; added the Capability sequencer, `PageShell`, the content check, CLAUDE.md, PATHWAY_SPEC.md and the prompts |
 | 1 Nov 2026 | First release, rev 2026.11; facts verified against Microsoft and HashiCorp documentation |

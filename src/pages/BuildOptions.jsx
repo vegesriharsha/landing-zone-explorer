@@ -12,7 +12,7 @@ const stack = [
   { id: 'ptn', name: 'AVM pattern modules', who: 'Microsoft (AVM owners)', items: ['avm-ptn-alz (management groups, policy, roles)', 'avm-ptn-alz-management', 'connectivity: hub-and-spoke or Virtual WAN', 'avm-ptn-alz-sub-vending'], update: 'Semantic versions on the Terraform Registry. Pin them; read release notes before bumping.' },
   { id: 'res', name: 'AVM resource modules', who: 'Microsoft (AVM owners)', items: ['avm-res-network-virtualnetwork', 'avm-res-network-azurefirewall', 'avm-res-operationalinsights-workspace', '…one per resource type'], update: 'Pulled in by the pattern modules. You rarely touch them directly.' },
   { id: 'prov', name: 'Providers', who: 'HashiCorp and Microsoft', items: ['AzureRM ~> 4.x (starter, management, connectivity)', 'AzAPI (avm-ptn-alz, vending)', 'alz (reads the library)'], update: 'Constraints are set by the modules above. A provider major version only works once every module allows it.' },
-  { id: 'lib', name: 'ALZ library', who: 'Microsoft (ALZ team)', items: ['Policy definitions and initiatives', 'Archetypes per management group', 'Release 2026.10.0'], update: 'Dated releases. The alz provider reads the version you pin, so new policies arrive only when you choose.' },
+  { id: 'lib', name: 'ALZ library', who: 'Microsoft (ALZ team)', items: ['Policy definitions and initiatives', 'Archetypes per management group', 'Release 2026.11.0'], update: 'Dated releases. The alz provider reads the version you pin, so new policies arrive only when you choose.' },
 ];
 
 export default function BuildOptions() {

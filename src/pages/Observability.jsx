@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Section, Insight, Segmented, Slider, Pill, Callout, Illustrative } from '../components/ui.jsx';
 import PageShell from '../components/PageShell.jsx';
 import { logs as price, PRICES_VERIFIED, PRICE_REGION } from '../content/prices.js';
-import { fmtUSD } from '../lib/hooks.js';
+import { fmtUSD, useProgress } from '../lib/hooks.js';
 
 /* ---------- 1. Telemetry flow ---------- */
 
@@ -19,6 +19,7 @@ const DEST = { platform: [640, 110], workload: [640, 270] };
 function TelemetryFlow() {
   const [sel, setSel] = useState('activity');
   const S = sources.find((s) => s.id === sel);
+  const t = useProgress(sel, 1800);
   const targets = (s) => (s.dest === 'both' ? ['platform', 'workload'] : [s.dest]);
   return (
     <div className="space-y-5">
@@ -32,7 +33,7 @@ function TelemetryFlow() {
               return (
                 <g key={`${s.id}-${d}`}>
                   <path d={path} fill="none" stroke={on ? 'var(--navy)' : 'var(--rule)'} strokeWidth={on ? 2 : 1.25} />
-                  {on && <path d={path} fill="none" stroke="var(--gold)" strokeWidth="2.5" className="flowing" />}
+                  {on && <path d={path} fill="none" stroke="var(--gold)" strokeWidth="2.5" strokeDasharray="6 6" strokeDashoffset={-t * 72} />}
                 </g>
               );
             }),
@@ -115,7 +116,7 @@ function estimate(types, gbs, plans, interactiveDays, years) {
   });
   const analyticsGB = rows.filter((r) => r.plan === 'analytics').reduce((a, r) => a + r.monthly, 0);
   const freeShare = Math.min(price.analyticsFreeGBPerMonth, analyticsGB);
-  const interactiveMonths = Math.max(0, (interactiveDays - 30) / 30);
+  const interactiveMonths = Math.max(0, (interactiveDays - 31) / 30);
   const longTermMonths = Math.max(0, years * 12 - Math.max(1, interactiveDays / 30));
   const out = rows.map((r) => {
     let ingest = r.monthly * planRate[r.plan];
@@ -162,7 +163,7 @@ function CostEstimator() {
         ))}
       </div>
       <div className="mt-5 grid gap-5 md:grid-cols-2">
-        <Slider id="ret-days" label="Interactive retention (Analytics)" min={30} max={730} step={30} value={days} onChange={setDays} format={(v) => `${v} days`} hint="First 30 days included; longer is charged per GB-month" />
+        <Slider id="ret-days" label="Interactive retention (Analytics)" min={30} max={730} step={30} value={days} onChange={setDays} format={(v) => `${v} days`} hint="First 31 days included; longer is charged per GB-month" />
         <Slider id="ret-years" label="Total retention for security and audit logs" min={1} max={12} step={1} value={years} onChange={setYears} format={(v) => `${v} year${v === 1 ? '' : 's'}`} hint="Moves to low-cost long-term retention; operational logs aren’t kept past interactive retention" />
       </div>
 
@@ -245,11 +246,33 @@ const alerts = [
 const allGroups = ['ag-platform', 'ag-connectivity', 'ag-loansvc', 'Sentinel incident'];
 const allPeople = ['Platform on-call', 'Network team', 'Workload on-call', 'Workload owner', 'FinOps', 'Security operations'];
 
+/** Greedy word wrap into at most two lines of about `max` characters. */
+function wrap2(text, max) {
+  const lines = [''];
+  for (const word of text.split(' ')) {
+    const cur = lines[lines.length - 1];
+    if (cur && cur.length + 1 + word.length > max && lines.length < 2) lines.push(word);
+    else lines[lines.length - 1] = cur ? `${cur} ${word}` : word;
+  }
+  return lines;
+}
+
+const CY = 100; // vertical centre of the diagram; every column is centred on it
+
 function AlertRouting() {
   const [sel, setSel] = useState('health');
   const A = alerts.find((a) => a.id === sel);
-  const gy = (g) => 40 + allGroups.indexOf(g) * 64;
-  const py = (p) => 30 + allPeople.indexOf(p) * 44;
+  const t = useProgress(sel, 1800);
+  // Only what this alert touches is drawn in full; the rest collapses to one muted row per column.
+  const groupsOn = allGroups.filter((g) => A.groups.includes(g));
+  const peopleOn = allPeople.filter((p) => A.people.includes(p));
+  const groupRows = groupsOn.length + (groupsOn.length < allGroups.length ? 1 : 0);
+  const peopleRows = peopleOn.length + (peopleOn.length < allPeople.length ? 1 : 0);
+  const gy = (i) => CY + (i - (groupRows - 1) / 2) * 56;
+  const py = (i) => CY + (i - (peopleRows - 1) / 2) * 44;
+  const fromLines = wrap2(A.from, 24);
+  const fromTop = fromLines.length === 1 ? CY - 6 : CY - 13;
+  const dash = { strokeDasharray: '6 6', strokeDashoffset: -t * 72 };
   return (
     <div className="grid items-start gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
       <div role="radiogroup" aria-label="Alert" className="flex flex-col border border-rule">
@@ -268,41 +291,54 @@ function AlertRouting() {
       </div>
       <div className="min-w-0 space-y-4">
         <div className="overflow-x-auto border border-rule bg-paper">
-          <svg viewBox="0 0 640 290" className="block w-full min-w-[520px]" role="img" aria-label={`Routing for ${A.name}`}>
-            <rect x={14} y={120} width={170} height={50} fill="var(--navy)" />
-            <text x={26} y={141} fontSize="11" fill="var(--on-navy)">
-              {A.from.length > 28 ? `${A.from.slice(0, 27)}…` : A.from}
+          <svg viewBox="0 0 640 200" className="block w-full min-w-[520px]" role="img" aria-label={`Routing for ${A.name}`}>
+            <rect x={14} y={CY - 29} width={170} height={58} fill="var(--navy)" />
+            <text x={26} y={fromTop} fontSize="11" fill="var(--on-navy)">
+              {fromLines.map((line, i) => (
+                <tspan key={line} x={26} dy={i === 0 ? 0 : 13}>
+                  {line}
+                </tspan>
+              ))}
             </text>
-            <text x={26} y={158} fontSize="10.5" fill="var(--on-navy)" opacity="0.8">
+            <text x={26} y={CY + 19} fontSize="10.5" fill="var(--on-navy)" opacity="0.8">
               alert fires
             </text>
-            {allGroups.map((g) => {
-              const on = A.groups.includes(g);
-              return (
-                <g key={g}>
-                  {on && <path d={`M184 145 C 230 145, 230 ${gy(g)}, 270 ${gy(g)}`} fill="none" stroke="var(--gold)" strokeWidth="2" className="flowing" />}
-                  <rect x={270} y={gy(g) - 17} width={150} height={34} fill="var(--surface)" stroke={on ? 'var(--navy)' : 'var(--rule)'} strokeWidth={on ? 2 : 1} opacity={on ? 1 : 0.55} />
-                  <text x={282} y={gy(g) + 4} fontSize="12" fontFamily="var(--font-mono)" fill={on ? 'var(--ink)' : 'var(--subtle)'}>
-                    {g}
-                  </text>
-                </g>
-              );
-            })}
-            {allPeople.map((p) => {
-              const on = A.people.includes(p);
-              return (
-                <g key={p}>
-                  {on &&
-                    A.groups.map((g) => (
-                      <path key={g} d={`M420 ${gy(g)} C 450 ${gy(g)}, 450 ${py(p)}, 480 ${py(p)}`} fill="none" stroke="var(--gold)" strokeWidth="2" className="flowing" />
-                    ))}
-                  <rect x={480} y={py(p) - 15} width={146} height={30} fill={on ? 'var(--navy-soft)' : 'var(--surface)'} stroke={on ? 'var(--navy)' : 'var(--rule)'} opacity={on ? 1 : 0.55} />
-                  <text x={492} y={py(p) + 4} fontSize="12" fill={on ? 'var(--ink)' : 'var(--subtle)'}>
-                    {p}
-                  </text>
-                </g>
-              );
-            })}
+            {groupsOn.map((g, i) => (
+              <g key={g}>
+                <path d={`M184 ${CY} C 230 ${CY}, 230 ${gy(i)}, 270 ${gy(i)}`} fill="none" stroke="var(--gold)" strokeWidth="2" {...dash} />
+                <rect x={270} y={gy(i) - 17} width={150} height={34} fill="var(--surface)" stroke="var(--navy)" strokeWidth={2} />
+                <text x={282} y={gy(i) + 4} fontSize="12" fontFamily="var(--font-mono)" fill="var(--ink)">
+                  {g}
+                </text>
+              </g>
+            ))}
+            {groupRows > groupsOn.length && (
+              <g>
+                <rect x={270} y={gy(groupRows - 1) - 17} width={150} height={34} fill="none" stroke="var(--rule)" strokeDasharray="3 3" />
+                <text x={282} y={gy(groupRows - 1) + 4} fontSize="12" fill="var(--subtle)">
+                  {allGroups.length - groupsOn.length} other action groups
+                </text>
+              </g>
+            )}
+            {peopleOn.map((p, j) => (
+              <g key={p}>
+                {groupsOn.map((g, i) => (
+                  <path key={g} d={`M420 ${gy(i)} C 450 ${gy(i)}, 450 ${py(j)}, 480 ${py(j)}`} fill="none" stroke="var(--gold)" strokeWidth="2" {...dash} />
+                ))}
+                <rect x={480} y={py(j) - 15} width={146} height={30} fill="var(--navy-soft)" stroke="var(--navy)" />
+                <text x={492} y={py(j) + 4} fontSize="12" fill="var(--ink)">
+                  {p}
+                </text>
+              </g>
+            ))}
+            {peopleRows > peopleOn.length && (
+              <g>
+                <rect x={480} y={py(peopleRows - 1) - 15} width={146} height={30} fill="none" stroke="var(--rule)" strokeDasharray="3 3" />
+                <text x={492} y={py(peopleRows - 1) + 4} fontSize="12" fill="var(--subtle)">
+                  {allPeople.length - peopleOn.length} others not paged
+                </text>
+              </g>
+            )}
           </svg>
         </div>
         <Insight stateKey={sel}>

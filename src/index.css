@@ -202,10 +202,3 @@ svg text {
   animation: fadein 0.35s ease-out both;
 }
 
-@keyframes dash {
-  to { stroke-dashoffset: -24; }
-}
-.flowing {
-  stroke-dasharray: 6 6;
-  animation: dash 0.9s linear infinite;
-}

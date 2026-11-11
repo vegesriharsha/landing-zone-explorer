@@ -72,24 +72,42 @@ function TrendChart({ series, week, onHover }) {
   const y = (v) => pad.t + (1 - (v - 80) / 20) * (H - pad.t - pad.b);
   const pts = series.map((v, i) => `${x(i)},${y(Math.max(80, v))}`).join(' ');
   const h = hover ?? week - 1;
+  const last = series.length - 1;
+  const pick = (i) => {
+    const c = Math.max(0, Math.min(last, i));
+    setHover(c);
+    onHover?.(c);
+  };
+  // Map a pointer or touch x position to the nearest week.
+  const pickAt = (clientX, el) => {
+    const r = el.getBoundingClientRect();
+    const px = ((clientX - r.left) / r.width) * W;
+    pick(Math.round(((px - pad.l) / (W - pad.l - pad.r)) * last));
+  };
+  const onKeyDown = (e) => {
+    const step = { ArrowLeft: -1, ArrowRight: 1, Home: -last, End: last }[e.key];
+    if (step === undefined) return;
+    e.preventDefault();
+    pick(h + step);
+  };
+  const leftHalf = x(h) < W / 2;
   return (
     <div className="relative">
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className="block w-full"
+        style={{ touchAction: 'pan-y' }}
         role="img"
-        aria-label="Policy compliance by week"
+        tabIndex={0}
+        aria-label={`Policy compliance by week. Week ${h + 1}: ${series[h].toFixed(1)}%. Use the arrow keys to move between weeks.`}
         onMouseLeave={() => {
           setHover(null);
           onHover?.(null);
         }}
-        onMouseMove={(e) => {
-          const r = e.currentTarget.getBoundingClientRect();
-          const px = ((e.clientX - r.left) / r.width) * W;
-          const i = Math.max(0, Math.min(series.length - 1, Math.round(((px - pad.l) / (W - pad.l - pad.r)) * (series.length - 1))));
-          setHover(i);
-          onHover?.(i);
-        }}
+        onMouseMove={(e) => pickAt(e.clientX, e.currentTarget)}
+        onTouchStart={(e) => pickAt(e.touches[0].clientX, e.currentTarget)}
+        onTouchMove={(e) => pickAt(e.touches[0].clientX, e.currentTarget)}
+        onKeyDown={onKeyDown}
       >
         {[80, 85, 90, 95, 100].map((v) => (
           <g key={v}>
@@ -114,8 +132,8 @@ function TrendChart({ series, week, onHover }) {
         <circle cx={x(week - 1)} cy={y(Math.max(80, series[week - 1]))} r={4} fill="none" stroke="var(--gold)" strokeWidth="1.5" />
       </svg>
       <div
-        className="pointer-events-none absolute top-1 border border-rule bg-surface px-2 py-1 text-[12px] shadow-none"
-        style={{ left: `${Math.min(80, (x(h) / W) * 100)}%` }}
+        className="pointer-events-none absolute top-1 max-w-[55%] border border-rule bg-surface px-2 py-1 text-[12px] shadow-none"
+        style={leftHalf ? { left: `${(x(h) / W) * 100}%` } : { right: `${100 - (x(h) / W) * 100}%` }}
       >
         <span className="text-subtle">Week {h + 1} · </span>
         <span className="tabular font-mono text-ink">{series[h].toFixed(1)}%</span>
@@ -164,7 +182,7 @@ export default function Guardrails() {
   return (
     <PageShell header={header} sources={['policyEffects', 'policyScope', 'policyExemption', 'remediation', 'defenderCspm', 'secureScore']}>
 
-      <Section n={1} title="Platform health" intro="Filters apply to everything below. Hover the chart for any week; the gold ring marks the week you’re in.">
+      <Section n={1} title="Platform health" intro="Filters apply to everything below. Hover or tap the chart for any week, or focus it and use the arrow keys; the gold ring marks the week you’re in.">
         <div className="mb-2">
           <Illustrative>Mock data</Illustrative>
         </div>
@@ -181,7 +199,7 @@ export default function Guardrails() {
             tone={nowPct >= 95 ? 'text-good' : 'text-ink'}
           />
           <Tile label="Non-compliant findings" value={ncNow.toLocaleString()} sub={`across ${assignments.length} assignments`} />
-          <Tile label="Secure score" value={`${Math.max(20, Math.min(95, secure))}%`} sub="Defender for Cloud classic score, illustrative" />
+          <Tile label="Secure score" value={`${Math.max(20, Math.min(95, secure))}%`} sub="Defender for Cloud secure score, illustrative" />
           <Tile label="Active exemptions" value={String(scope === 'all' ? exemptions : '—')} sub={scope === 'all' ? 'Each with an owner and expiry date' : 'Shown for All only'} />
         </div>
 

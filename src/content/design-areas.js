@@ -17,7 +17,7 @@ export default {
   labels: { list: 'Decisions you make', callout: 'What the accelerator gives you' },
   items: [
     {
-      name: 'Billing and Microsoft Entra tenant',
+      name: 'Azure billing and Active Directory tenant',
       short: 'Billing & tenant',
       group: 'Environment',
       tag: 'Decided in: Plan',

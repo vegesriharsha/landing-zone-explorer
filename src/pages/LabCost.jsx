@@ -19,7 +19,7 @@ const usage = [
 
 const components = [
   { id: 'gov', name: 'Management groups, Azure Policy, RBAC', group: 'Free', fixed: 0, note: 'No charge. The whole governance layer can run for nothing.' },
-  { id: 'law', name: 'Log Analytics workspace (light use)', group: 'Free', fixed: 0, note: `First ${logs.analyticsFreeGBPerMonth} GB a month of Analytics ingestion is free; a lab stays under it.` },
+  { id: 'law', name: 'Log Analytics workspace (light use)', group: 'Free', fixed: 0, note: `First ${logs.analyticsFreeGBPerMonth} GB a month of Analytics ingestion is free per billing account; a lab stays under it.` },
   { id: 'vnet', name: 'Hub and spoke networks, peering', group: 'Free', fixed: 0, note: 'Networks are free; peering charges per GB, which a lab barely moves.' },
   { id: 'cspm', name: 'Defender for Cloud foundational CSPM', group: 'Free', fixed: 0, note: 'Free posture checks and secure score.' },
   { id: 'dns', name: 'Private DNS zones (three)', group: 'Cheap', fixed: 3 * p.privateDnsZoneMonth, note: 'Per zone per month.' },
@@ -70,6 +70,8 @@ export default function LabCost() {
   const x = (d) => pad.l + (d / 30) * (W - pad.l - pad.r);
   const y = (v) => pad.t + (1 - v / C.amount) * (H - pad.t - pad.b);
   const zeroDay = Math.min(30, days);
+  // Near the right edge the label would run off the chart, so draw it to the left of the point instead.
+  const flipLabel = x(zeroDay) > W * 0.8;
 
   const header = {
     eyebrow: "Dashboard · Lab cost meter",
@@ -140,7 +142,7 @@ export default function LabCost() {
             {zeroDay < 30 && (
               <g>
                 <circle cx={x(zeroDay)} cy={y(0)} r={5} fill="var(--bad)" stroke="var(--surface)" strokeWidth="2" />
-                <text x={x(zeroDay) + 8} y={y(0) - 8} fontSize="11" fill="var(--bad)">
+                <text x={x(zeroDay) + (flipLabel ? -8 : 8)} y={y(0) - 8} textAnchor={flipLabel ? 'end' : 'start'} fontSize="11" fill="var(--bad)">
                   stops here
                 </text>
               </g>
