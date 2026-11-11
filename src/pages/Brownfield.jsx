@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { PageHeader, Section, Insight, Button, Pill, Sources, Callout, Code } from '../components/ui.jsx';
-import { VERIFIED, src } from '../data/sources.js';
+import { Section, Insight, Button, Pill, Callout, Code } from '../components/ui.jsx';
+import PageShell from '../components/PageShell.jsx';
 
 const steps = [
   { title: 'Take stock', text: 'Everything was built by hand. It works, but nobody can say exactly how, and every change is a risk.' },
@@ -141,19 +141,19 @@ export default function Brownfield() {
     .map((c) => `${c.id.padEnd(8)} ${c.name.padEnd(30)} ${csvAction[c.id][choice[c.id]]}`)
     .join('\n');
 
+  const header = {
+    eyebrow: "Stepper · Brownfield migration",
+    title: "Bring a hand-built platform under code",
+    deck: "Don’t rebuild in place. Build the coded landing zone beside the old one, adopt or replace each piece, land subscriptions in audit-only groups, then enforce.",
+    meta: [
+      { dt: 'Steps', dd: String(steps.length) },
+      { dt: 'Components', dd: String(components.length) },
+      { dt: 'Approach', dd: 'Beside, then move' },
+    ],
+  };
+
   return (
-    <article>
-      <PageHeader
-        eyebrow="Stepper · Brownfield migration"
-        title="Bring a hand-built platform under code"
-        deck="Don’t rebuild in place. Build the coded landing zone beside the old one, adopt or replace each piece, land subscriptions in audit-only groups, then enforce."
-        meta={[
-          { dt: 'Steps', dd: String(steps.length) },
-          { dt: 'Components', dd: String(components.length) },
-          { dt: 'Approach', dd: 'Beside, then move' },
-          { dt: 'Last verified', dd: VERIFIED },
-        ]}
-      />
+    <PageShell header={header} sources={['transition', 'duplicateAudit', 'alzMigration', 'stateImporter', 'mgManage', 'moveSupport', 'tfImport', 'remediation']}>
 
       <Section n={1} title="Walk the migration" intro="Step through it. Each component shows its state; change adopt or replace at any step and see the consequences.">
         <div className="flex items-center gap-1" role="tablist" aria-label="Migration steps">
@@ -288,8 +288,6 @@ export default function Brownfield() {
           </Callout>
         </div>
       </Section>
-
-      <Sources verified={VERIFIED} items={[src.transition, src.duplicateAudit, src.alzMigration, src.stateImporter, src.mgManage, src.moveSupport, src.tfImport, src.remediation]} />
-    </article>
+    </PageShell>
   );
 }

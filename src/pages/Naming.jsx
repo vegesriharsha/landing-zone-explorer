@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Check, X } from 'lucide-react';
-import { PageHeader, Section, Insight, Segmented, Select, TextInput, Pill, Sources, Callout, Code } from '../components/ui.jsx';
-import { VERIFIED, src } from '../data/sources.js';
+import { Section, Insight, Segmented, Select, TextInput, Pill, Callout, Code } from '../components/ui.jsx';
+import PageShell from '../components/PageShell.jsx';
 
 const regions = [
   { value: 'cus', label: 'Central US (cus)', name: 'centralus' },
@@ -132,19 +132,19 @@ export default function Naming() {
   const azOk = az.every((c) => c.ok);
   const convOk = conv.every((c) => c.ok);
 
+  const header = {
+    eyebrow: "Tool · Naming studio",
+    title: "Names you can live with for years",
+    deck: "Generate names from one convention, watch Azure's length and character rules bite, and check names someone else wrote.",
+    meta: [
+      { dt: 'Pattern', dd: 'type-workload-env-region-nnn' },
+      { dt: 'Resource types', dd: String(types.length) },
+      { dt: 'Source', dd: 'CAF abbreviations' },
+    ],
+  };
+
   return (
-    <article>
-      <PageHeader
-        eyebrow="Tool · Naming studio"
-        title="Names you can live with for years"
-        deck="Generate names from one convention, watch Azure's length and character rules bite, and check names someone else wrote."
-        meta={[
-          { dt: 'Pattern', dd: 'type-workload-env-region-nnn' },
-          { dt: 'Resource types', dd: String(types.length) },
-          { dt: 'Source', dd: 'CAF abbreviations' },
-          { dt: 'Last verified', dd: VERIFIED },
-        ]}
-      />
+    <PageShell header={header} sources={['naming', 'abbreviations', 'namingRules', 'mgOptions']}>
 
       <Section n={1} title="Generate" intro="Change the inputs and every name updates. Names that break an Azure rule turn red; the short form exists for the types with tight limits.">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -338,8 +338,6 @@ export default function Naming() {
           </Callout>
         </div>
       </Section>
-
-      <Sources verified={VERIFIED} items={[src.naming, src.abbreviations, src.namingRules, src.mgOptions]} />
-    </article>
+    </PageShell>
   );
 }

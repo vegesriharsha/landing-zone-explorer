@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import { Check, Send } from 'lucide-react';
-import { PageHeader, Section, Insight, Segmented, Select, TextInput, Toggle, Slider, Button, Pill, Sources, Callout, Code } from '../components/ui.jsx';
+import { Section, Insight, Segmented, Select, TextInput, Toggle, Slider, Button, Pill, Callout, Code } from '../components/ui.jsx';
+import PageShell from '../components/PageShell.jsx';
 import { useProgress } from '../lib/hooks.js';
-import { VERIFIED, src } from '../data/sources.js';
 
 // Spoke address pool 10.20.0.0/20 split into /24 blocks; true = already allocated.
 const POOL = [true, true, true, false, true, false, false, false, false, false, false, false, false, false, false, false];
@@ -126,19 +126,19 @@ ${rgs.map((r) => `    ${r.split('-')[2]} = { name = "${r}", location = "${region
   }
 }`;
 
+  const header = {
+    eyebrow: "Simulator · Subscription vending",
+    title: "A subscription is a pull request, not a ticket",
+    deck: "Fill in a workload’s request and watch the vending module build a ready-to-use landing zone: placed, tagged, budgeted, networked and access-controlled.",
+    meta: [
+      { dt: 'Module', dd: 'avm-ptn-alz-sub-vending' },
+      { dt: 'Steps', dd: String(steps.length) },
+      { dt: 'Billing', dd: billing === 'csp' ? 'CSP (adopt by ID)' : billing.toUpperCase() },
+    ],
+  };
+
   return (
-    <article>
-      <PageHeader
-        eyebrow="Simulator · Subscription vending"
-        title="A subscription is a pull request, not a ticket"
-        deck="Fill in a workload’s request and watch the vending module build a ready-to-use landing zone: placed, tagged, budgeted, networked and access-controlled."
-        meta={[
-          { dt: 'Module', dd: 'avm-ptn-alz-sub-vending' },
-          { dt: 'Steps', dd: String(steps.length) },
-          { dt: 'Billing', dd: billing === 'csp' ? 'CSP (adopt by ID)' : billing.toUpperCase() },
-          { dt: 'Last verified', dd: VERIFIED },
-        ]}
-      />
+    <PageShell header={header} sources={['subVending', 'subVendingRepo', 'mpaSubs', 'cafCsp', 'budgets']}>
 
       <Section n={1} title="Request a landing zone" intro="These are the questions a vending form asks. Everything else comes from the platform’s defaults.">
         <div className="grid gap-x-6 gap-y-5 md:grid-cols-2 lg:grid-cols-3">
@@ -258,8 +258,6 @@ ${rgs.map((r) => `    ${r.split('-')[2]} = { name = "${r}", location = "${region
           </Callout>
         </div>
       </Section>
-
-      <Sources verified={VERIFIED} items={[src.subVending, src.subVendingRepo, src.mpaSubs, src.cafCsp, src.budgets]} />
-    </article>
+    </PageShell>
   );
 }

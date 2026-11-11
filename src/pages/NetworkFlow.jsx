@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Send } from 'lucide-react';
-import { PageHeader, Section, Insight, Segmented, Toggle, Button, Pill, Sources, Callout } from '../components/ui.jsx';
+import { Section, Insight, Segmented, Toggle, Button, Pill, Callout } from '../components/ui.jsx';
+import PageShell from '../components/PageShell.jsx';
 import { useProgress, pointOnPolyline } from '../lib/hooks.js';
-import { VERIFIED, src } from '../data/sources.js';
 
 const P = {
   A: [800, 120],
@@ -154,19 +154,19 @@ export default function NetworkFlow() {
   const hub = topo === 'hub';
   const on = (name) => f.from === name || f.to === name;
 
+  const header = {
+    eyebrow: "Animated flow · Network traffic",
+    title: "Every flow goes past the firewall, if you route it there",
+    deck: "Send traffic between spokes, on-premises and the internet. Switch off the routing and watch peering, gateways and Azure's own routes take it around the firewall instead.",
+    meta: [
+      { dt: 'Topology', dd: hub ? 'Hub-and-spoke' : 'Virtual WAN' },
+      { dt: 'Flows', dd: String(flows.length) },
+      { dt: 'Firewall', dd: 'Azure Firewall' },
+    ],
+  };
+
   return (
-    <article>
-      <PageHeader
-        eyebrow="Animated flow · Network traffic"
-        title="Every flow goes past the firewall, if you route it there"
-        deck="Send traffic between spokes, on-premises and the internet. Switch off the routing and watch peering, gateways and Azure's own routes take it around the firewall instead."
-        meta={[
-          { dt: 'Topology', dd: hub ? 'Hub-and-spoke' : 'Virtual WAN' },
-          { dt: 'Flows', dd: String(flows.length) },
-          { dt: 'Firewall', dd: 'Azure Firewall' },
-          { dt: 'Last verified', dd: VERIFIED },
-        ]}
-      />
+    <PageShell header={header} sources={['hubSpoke', 'vwan', 'firewallSku', 'scenarios']}>
 
       <Section n={1} title="Send a packet" intro="Pick a flow and the settings, then watch the route. Gold means it arrived without inspection; red means it was stopped.">
         <div className="space-y-4">
@@ -324,8 +324,6 @@ export default function NetworkFlow() {
           </Callout>
         </div>
       </Section>
-
-      <Sources verified={VERIFIED} items={[src.hubSpoke, src.vwan, src.firewallSku, src.scenarios]} />
-    </article>
+    </PageShell>
   );
 }

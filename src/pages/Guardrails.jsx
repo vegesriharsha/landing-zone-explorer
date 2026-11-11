@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { CheckCircle2, ShieldCheck, Clock } from 'lucide-react';
-import { PageHeader, Section, Insight, Segmented, Slider, Button, Pill, Sources, Callout, Illustrative } from '../components/ui.jsx';
-import { VERIFIED, src } from '../data/sources.js';
+import { Section, Insight, Segmented, Slider, Button, Pill, Callout, Illustrative } from '../components/ui.jsx';
+import PageShell from '../components/PageShell.jsx';
 
 const scopes = [
   { value: 'all', label: 'All' },
@@ -150,19 +150,19 @@ export default function Guardrails() {
     setLast({ a, r: outstanding <= 0 && r.key === 'wait' ? { key: 'ready' } : r, outstanding });
   };
 
+  const header = {
+    eyebrow: "Dashboard · Compliance",
+    title: "Audit first, enforce when the numbers say so",
+    deck: "A mock platform dashboard for Contoso Bank. Scrub through a twelve-week rollout, then switch policies from audit to enforce and see who it would hurt.",
+    meta: [
+      { dt: 'Assignments', dd: String(assignments.length) },
+      { dt: 'Resources', dd: total.toLocaleString() },
+      { dt: 'Data', dd: 'Mock' },
+    ],
+  };
+
   return (
-    <article>
-      <PageHeader
-        eyebrow="Dashboard · Compliance"
-        title="Audit first, enforce when the numbers say so"
-        deck="A mock platform dashboard for Contoso Bank. Scrub through a twelve-week rollout, then switch policies from audit to enforce and see who it would hurt."
-        meta={[
-          { dt: 'Assignments', dd: String(assignments.length) },
-          { dt: 'Resources', dd: total.toLocaleString() },
-          { dt: 'Data', dd: 'Mock' },
-          { dt: 'Last verified', dd: VERIFIED },
-        ]}
-      />
+    <PageShell header={header} sources={['policyEffects', 'policyScope', 'policyExemption', 'remediation', 'defenderCspm', 'secureScore']}>
 
       <Section n={1} title="Platform health" intro="Filters apply to everything below. Hover the chart for any week; the gold ring marks the week you’re in.">
         <div className="mb-2">
@@ -269,8 +269,6 @@ export default function Guardrails() {
           </Callout>
         </div>
       </Section>
-
-      <Sources verified={VERIFIED} items={[src.policyEffects, src.policyScope, src.policyExemption, src.remediation, src.defenderCspm, src.secureScore]} />
-    </article>
+    </PageShell>
   );
 }

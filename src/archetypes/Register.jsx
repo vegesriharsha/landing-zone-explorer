@@ -1,15 +1,17 @@
 import { useMemo, useState } from 'react';
 import { Search, Copy, Check } from 'lucide-react';
-import { PageHeader, Section, Insight, Segmented, Slider, Pill, Sources, Callout } from '../components/ui.jsx';
-import { VERIFIED, src } from '../data/sources.js';
-import { register, cadence, statusInfo } from '../data/register.js';
+import { Section, Insight, Segmented, Slider, Pill, Callout } from '../components/ui.jsx';
+import PageShell from '../components/PageShell.jsx';
+import { src } from '../content/sources.js';
 
 const statuses = ['Adopt', 'Hold', 'Watch', 'Decide', 'Retiring'];
 const tone = { Adopt: 'good', Hold: 'neutral', Watch: 'gold', Decide: 'navy', Retiring: 'bad' };
 const DAY = 86400000;
 const fmtDate = (d) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
-export default function Register() {
+/** Components with a status and a review cadence; move the date forward to see what falls due. */
+export default function Register({ data }) {
+  const { register, cadence, statusInfo } = data;
   const [status, setStatus] = useState('All');
   const [cat, setCat] = useState('All');
   const [q, setQ] = useState('');
@@ -52,20 +54,16 @@ export default function Register() {
   };
 
   return (
-    <article>
-      <PageHeader
-        eyebrow="Dashboard · Technology register"
-        title="Everything we rely on, and when we last checked"
-        deck="Each component has a status and a review cadence. Move the date forward to see what falls due, and filter for what needs attention."
-        meta={[
-          { dt: 'Entries', dd: String(register.length) },
-          { dt: 'Adopt', dd: String(counts.Adopt) },
-          { dt: 'Due by date', dd: String(dueCount) },
-          { dt: 'Last verified', dd: VERIFIED },
-        ]}
-      />
-
-      <Section n={1} title="The register" intro="Click a status tile to filter. Data lives in one file, src/data/register.js, so updating it is a one-line pull request.">
+    <PageShell
+      header={data.header}
+      sources={data.sources}
+      verified={data.verified}
+      extraMeta={[
+        { dt: 'Entries', dd: String(register.length) },
+        { dt: 'Due by date', dd: String(dueCount) },
+      ]}
+    >
+      <Section n={1} title="The register" intro={data.intro ?? 'Click a status tile to filter. Updating an entry is a one-line pull request to the data file.'}>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
           {statuses.map((s) => (
             <button
@@ -180,7 +178,6 @@ export default function Register() {
         </div>
       </Section>
 
-      <Sources verified={VERIFIED} items={[src.accelerator, src.alzLibrary, src.avm, src.reviewChecklists]} />
-    </article>
+    </PageShell>
   );
 }

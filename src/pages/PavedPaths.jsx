@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import { Play } from 'lucide-react';
-import { PageHeader, Section, Insight, Slider, Toggle, Button, Pill, Sources, Callout, Illustrative } from '../components/ui.jsx';
+import { Section, Insight, Slider, Toggle, Button, Pill, Callout, Illustrative } from '../components/ui.jsx';
+import PageShell from '../components/PageShell.jsx';
 import { useProgress } from '../lib/hooks.js';
-import { VERIFIED, src } from '../data/sources.js';
 
 /**
  * Queue wait grows with load: a single queue at utilisation u waits roughly
@@ -102,19 +102,19 @@ export default function PavedPaths() {
   const elapsed = t * scale;
   const waitShare = 1 - workOf(ticket) / tT;
 
+  const header = {
+    eyebrow: "Animated flow · Paved paths",
+    title: "Most of a ticket’s life is waiting",
+    deck: "Race the same request down two roads: a chain of tickets to different teams, and a paved path where the platform’s defaults are already approved.",
+    meta: [
+      { dt: 'Ticket path', dd: `${tT.toFixed(0)} days` },
+      { dt: 'Paved path', dd: `${tP.toFixed(1)} days` },
+      { dt: 'Waiting', dd: `${Math.round(waitShare * 100)}% of ticket time` },
+    ],
+  };
+
   return (
-    <article>
-      <PageHeader
-        eyebrow="Animated flow · Paved paths"
-        title="Most of a ticket’s life is waiting"
-        deck="Race the same request down two roads: a chain of tickets to different teams, and a paved path where the platform’s defaults are already approved."
-        meta={[
-          { dt: 'Ticket path', dd: `${tT.toFixed(0)} days` },
-          { dt: 'Paved path', dd: `${tP.toFixed(1)} days` },
-          { dt: 'Waiting', dd: `${Math.round(waitShare * 100)}% of ticket time` },
-          { dt: 'Last verified', dd: VERIFIED },
-        ]}
-      />
+    <PageShell header={header} sources={['platformEng', 'idpTeam', 'subVending', 'adeRetire']}>
 
       <Section n={1} title="Run the race" intro="A workload team needs a production landing zone with one firewall rule. Change the load on the platform team and watch the ticket path stretch.">
         <div className="mb-3">
@@ -174,8 +174,6 @@ export default function PavedPaths() {
           </Callout>
         </div>
       </Section>
-
-      <Sources verified={VERIFIED} items={[src.platformEng, src.idpTeam, src.subVending, src.adeRetire]} />
-    </article>
+    </PageShell>
   );
 }

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
-import { PageHeader, Section, Insight, Segmented, Pill, Sources, Callout, Button } from '../components/ui.jsx';
-import { VERIFIED, src } from '../data/sources.js';
-import { lab as p, logs, PRICES_VERIFIED, PRICE_REGION, HOURS_PER_MONTH } from '../data/prices.js';
+import { Section, Insight, Segmented, Pill, Callout, Button } from '../components/ui.jsx';
+import PageShell from '../components/PageShell.jsx';
+import { lab as p, logs, PRICES_VERIFIED, PRICE_REGION, HOURS_PER_MONTH } from '../content/prices.js';
 import { fmtUSD } from '../lib/hooks.js';
 
 const credits = [
@@ -71,19 +71,19 @@ export default function LabCost() {
   const y = (v) => pad.t + (1 - v / C.amount) * (H - pad.t - pad.b);
   const zeroDay = Math.min(30, days);
 
+  const header = {
+    eyebrow: "Dashboard · Lab cost meter",
+    title: "How far can free credits take you?",
+    deck: "Plan a personal landing-zone lab that never touches your card. Switch components on, choose how long they run, and watch the credit burn.",
+    meta: [
+      { dt: 'Credit', dd: `${fmtUSD(C.amount)} / ${C.period}` },
+      { dt: 'Monthly burn', dd: fmtUSD(burn, 2) },
+      { dt: 'Prices', dd: `${PRICE_REGION}, ${PRICES_VERIFIED}` },
+    ],
+  };
+
   return (
-    <article>
-      <PageHeader
-        eyebrow="Dashboard · Lab cost meter"
-        title="How far can free credits take you?"
-        deck="Plan a personal landing-zone lab that never touches your card. Switch components on, choose how long they run, and watch the credit burn."
-        meta={[
-          { dt: 'Credit', dd: `${fmtUSD(C.amount)} / ${C.period}` },
-          { dt: 'Monthly burn', dd: fmtUSD(burn, 2) },
-          { dt: 'Prices', dd: `${PRICE_REGION}, ${PRICES_VERIFIED}` },
-          { dt: 'Last verified', dd: VERIFIED },
-        ]}
-      />
+    <PageShell header={header} sources={['freeAccount', 'vsCredits', 'spendingLimit', 'budgets', 'retailPrices', 'pricingCalc']}>
 
       <Section n={1} title="Your credit" intro="Credits with a spending limit are the only way to guarantee $0 out of pocket: when they run out, resources stop instead of billing your card.">
         <div className="grid items-end gap-5 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
@@ -212,8 +212,6 @@ export default function LabCost() {
           </Callout>
         </div>
       </Section>
-
-      <Sources verified={VERIFIED} items={[src.freeAccount, src.vsCredits, src.spendingLimit, src.budgets, src.retailPrices, src.pricingCalc]} />
-    </article>
+    </PageShell>
   );
 }
