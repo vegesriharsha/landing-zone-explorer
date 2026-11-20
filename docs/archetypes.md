@@ -117,6 +117,6 @@ register: [{ name, cat, status: 'Adopt', version, verified: '2026-11-04', note, 
 
 ## custom
 
-Copy `src/pages/RiskTier.jsx`. Keep `PageShell` (header + sources), put controls above results, explain the current
+Copy `src/pages/PavedPaths.jsx`. Keep `PageShell` (header + sources), put controls above results, explain the current
 state in an `Insight`, label invented weights or numbers with `Illustrative`, and register it in `registry.js` with
 `component: YourPage`.

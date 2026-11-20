@@ -14,7 +14,7 @@ using maker credentials can expose data the user shouldn't see”]**.
 - **The moment it should click:** [ONE SENTENCE: “When I change X, I see Y, because Z.”]
 - **Sources the rules must follow:** [VENDOR DOCS, OR “find them”]
 
-Read `CLAUDE.md`, `docs/visual-patterns.md` and `src/pages/RiskTier.jsx` first. Then work in these steps and show me
+Read `CLAUDE.md`, `docs/visual-patterns.md` and `src/pages/PavedPaths.jsx` first. Then work in these steps and show me
 steps 1 to 3 before writing code.
 
 1. **The mechanism.** State the concept as three to six rules the visual will obey, each with its source URL.
@@ -30,7 +30,7 @@ steps 1 to 3 before writing code.
    - The **state → Insight table**: every meaningful combination of controls, and the one or two plain sentences
      the Insight panel shows for it. This table is the teaching; write it before any code.
    - Three “try this” scenarios that walk a reader to the click moment.
-4. **Build** a custom page from `RiskTier.jsx`: `PageShell`, controls above the visual, the Insight panel, a short
+4. **Build** a custom page from `PavedPaths.jsx`: `PageShell`, controls above the visual, the Insight panel, a short
    “What to take away” list of three or four points, `Illustrative` labels on invented values, sources by key.
    SVG for diagrams (tokens only, no hex), `useProgress` for motion, `useLocalState` only for conveniences.
    Register it in `src/content/registry.js` with `component`.
