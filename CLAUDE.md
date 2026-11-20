@@ -16,7 +16,7 @@ this file before changing anything.
 | Icons | lucide-react, imported one icon at a time | 1.59.0 |
 | Language | JavaScript (ES modules, `.js` / `.jsx`) | — |
 | Fonts | Google Fonts link in `index.html`: Cormorant Garamond, Geist, JetBrains Mono | — |
-| Checks | `scripts/check-content.mjs` (keys and links); Playwright via `scripts/shoot.cjs` (dev-time only) | current |
+| Checks | `scripts/check-content.mjs` (keys and links); vitest + jsdom + Testing Library render smoke tests (dev-only); Playwright via `scripts/shoot.cjs` (dev-time only) | vitest 5.1.1, jsdom 31.0.1, @testing-library/react 16.3.3, @testing-library/dom 10.4.2 |
 | Publishing | GitHub Actions to GitHub Pages | checkout v7, setup-node v7, configure-pages v6, upload-pages-artifact v5, deploy-pages v5 |
 
 Rules the stack implies:
@@ -40,6 +40,7 @@ Rules the stack implies:
 npm ci              # install exactly what package-lock.json says
 npm run dev         # http://localhost:5173, rebuilds on save
 npm run check       # every source key, page id and register source exists; add --urls to fetch every source URL
+npm test            # vitest render smoke tests for the simulator pages
 npm run build       # static site in dist/
 npm run preview     # serve dist/ at http://localhost:4173
 npm run shots -- 390 dark all     # screenshots + overflow + console-error check (preview must be running)
