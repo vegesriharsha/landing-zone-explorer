@@ -50,5 +50,7 @@ export default {
     { name: 'Microsoft Entra PIM (Azure resource roles)', cat: 'Security', status: 'Adopt', version: '—', verified: '2026-11-20', note: 'Eligible and active assignments with time-bound activation; needs licences.', src: 'pimOverview' },
     { name: 'Microsoft Entra Conditional Access', cat: 'Security', status: 'Adopt', version: '—', verified: '2026-11-20', note: 'Needs Entra ID P1; risk-based policies need Entra ID Protection. Targeting agents is preview.', src: 'caOverview' },
     { name: 'PIM preview features (app roles, agent access)', cat: 'Security', status: 'Hold', version: 'Preview', verified: '2026-11-20', note: 'Marked preview on the PIM pages. Don’t build on them.', src: 'pimOverview' },
+    { name: 'Azure DNS Private Resolver', cat: 'Platform code', status: 'Adopt', version: '—', verified: '2026-11-20', note: 'Inbound and outbound endpoints for on-premises and Azure name resolution; no preview label on its overview. Doesn’t support ExpressRoute FastPath.', src: 'dnsResolver' },
+    { name: 'Virtual network TAP and IPv6-only peering', cat: 'Platform code', status: 'Hold', version: 'Preview', verified: '2026-11-20', note: 'The virtual network FAQ and peering pages mark these preview. Don’t build on them.', src: 'vnetPeering' },
   ],
 };

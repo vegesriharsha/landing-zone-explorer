@@ -21,6 +21,7 @@ import PavedPaths from '../pages/PavedPaths.jsx';
 import LabCost from '../pages/LabCost.jsx';
 import Resilience from '../pages/Resilience.jsx';
 import Identity from '../pages/Identity.jsx';
+import IpDns from '../pages/IpDns.jsx';
 
 export const groups = [
   {
@@ -40,6 +41,7 @@ export const groups = [
       { id: 'network-flow', title: 'Network traffic', kind: 'Animated flow', component: NetworkFlow, blurb: 'Send packets between spokes, on-premises and the internet and watch where the firewall sits.' },
       { id: 'resource-groups', title: 'Resource groups', kind: 'Simulator', component: ResourceGroups, blurb: 'Sort a workload into resource groups and get feedback on lifecycle, access and ownership.' },
       { id: 'naming', title: 'Naming studio', kind: 'Tool', component: Naming, blurb: 'Generate names from a convention and check them against Azure length and character rules.' },
+      { id: 'ip-dns', title: 'IP plan and private DNS', kind: 'Simulator', component: IpDns, blurb: 'Lay out hub and spoke address space, check an on-premises range for overlap and follow a private endpoint name.' },
     ],
   },
   {

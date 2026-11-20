@@ -9,10 +9,11 @@ import Observability from '../pages/Observability.jsx';
 import StateBackends from '../pages/StateBackends.jsx';
 import Resilience from '../pages/Resilience.jsx';
 import Identity from '../pages/Identity.jsx';
+import IpDns from '../pages/IpDns.jsx';
 
 // Smoke tests: each simulator page mounts and shows a heading. They lock current
 // behaviour (no crash, a title, no NaN in the text) before any refactor.
-const pages = { Billing, BuildOptions, Guardrails, LabCost, NetworkFlow, Observability, StateBackends, Resilience, Identity };
+const pages = { Billing, BuildOptions, Guardrails, LabCost, NetworkFlow, Observability, StateBackends, Resilience, Identity, IpDns };
 
 describe.each(Object.entries(pages))('%s', (_name, Page) => {
   it('renders a title and no NaN or undefined text', () => {

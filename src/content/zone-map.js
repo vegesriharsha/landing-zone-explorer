@@ -30,6 +30,7 @@ export const boxes = [
   { page: 'register', x: 796, y: 560, w: 184, h: 44 },
   { page: 'resilience', x: 20, y: 620, w: 184, h: 44 },
   { page: 'identity', x: 214, y: 620, w: 184, h: 44 },
+  { page: 'ip-dns', x: 408, y: 620, w: 184, h: 44 },
 ];
 
 // Management groups drawn as plain labels (they are the subject of the hierarchy page).
