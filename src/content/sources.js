@@ -228,4 +228,15 @@ export const src = {
   retailPrices: { title: 'Azure Retail Prices API', url: 'https://learn.microsoft.com/rest/api/cost-management/retail-prices/azure-retail-prices' },
   monitorPricing: { title: 'Azure Monitor pricing', url: 'https://azure.microsoft.com/pricing/details/monitor/' },
   logsOverview: { title: 'Azure Monitor Logs overview: table plan comparison', url: 'https://learn.microsoft.com/azure/azure-monitor/logs/data-platform-logs' },
+  azZones: { title: 'Azure availability zones overview', url: 'https://learn.microsoft.com/azure/reliability/availability-zones-overview' },
+  regionsPaired: { title: 'Azure region pairs and nonpaired regions', url: 'https://learn.microsoft.com/azure/reliability/regions-paired' },
+  regionsList: { title: 'List of Azure regions', url: 'https://learn.microsoft.com/azure/reliability/regions-list' },
+  cafBcdr: {
+    title: 'CAF: Business continuity and disaster recovery',
+    url: 'https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/management-business-continuity-disaster-recovery',
+  },
+  backupOverview: { title: 'What is Azure Backup?', url: 'https://learn.microsoft.com/azure/backup/backup-overview' },
+  siteRecovery: { title: 'About Azure Site Recovery', url: 'https://learn.microsoft.com/azure/site-recovery/site-recovery-overview' },
+  immutableVault: { title: 'Immutable vault for Azure Backup', url: 'https://learn.microsoft.com/azure/backup/backup-azure-immutable-vault-concept' },
+  wafTargets: { title: 'Well-Architected: defining reliability targets', url: 'https://learn.microsoft.com/azure/well-architected/reliability/metrics' },
 };

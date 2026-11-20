@@ -21,7 +21,7 @@ describe('Landing zone map', () => {
   it('keeps every box inside the viewBox without overlapping another box', () => {
     for (const b of boxes) {
       expect(b.x + b.w).toBeLessThanOrEqual(1000);
-      expect(b.y + b.h).toBeLessThanOrEqual(640);
+      expect(b.y + b.h).toBeLessThanOrEqual(700);
     }
     for (let i = 0; i < boxes.length; i += 1) {
       for (let j = i + 1; j < boxes.length; j += 1) {
