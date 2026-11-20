@@ -20,6 +20,7 @@ import Billing from '../pages/Billing.jsx';
 import PavedPaths from '../pages/PavedPaths.jsx';
 import LabCost from '../pages/LabCost.jsx';
 import Resilience from '../pages/Resilience.jsx';
+import Identity from '../pages/Identity.jsx';
 
 export const groups = [
   {
@@ -59,6 +60,7 @@ export const groups = [
       { id: 'billing', title: 'Billing and cost', kind: 'Explorer', component: Billing, blurb: 'How CSP, MCA and EA billing are structured and how a steady estate keeps costs down.' },
       { id: 'paved-paths', title: 'Paved paths', kind: 'Animated flow', component: PavedPaths, blurb: 'Race a ticket queue against a paved path and see where the days go.' },
       { id: 'resilience', title: 'Resilience and recovery', kind: 'Simulator', component: Resilience, blurb: 'Place a workload, break a zone, a region or the data, and see what survives and what you must restore.' },
+      { id: 'identity', title: 'Identity and access', kind: 'Simulator', component: Identity, blurb: 'Assign a role at a scope, see which subscriptions it reaches, and check emergency access and Conditional Access.' },
       { id: 'register', title: 'Technology register', kind: 'Dashboard', archetype: 'register', data: register, blurb: 'Every component, its status and when it was last verified. Filter for what needs attention.' },
     ],
   },
