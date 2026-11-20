@@ -1,6 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 import { Section, Prose, Callout, Pill } from '../components/ui.jsx';
 import PageShell from '../components/PageShell.jsx';
+import LandingZoneMap from '../components/LandingZoneMap.jsx';
 import config from '../pathway.config.js';
 import { groups } from '../content/registry.js';
 
@@ -22,11 +23,19 @@ export default function Home() {
         )}
       </Section>
 
+      <Section
+        n={2}
+        title="The landing zone on one page"
+        intro="Every page sits where its subject lives. Click any box to open it. The layout shows Contoso Bank's platform and is illustrative."
+      >
+        <LandingZoneMap />
+      </Section>
+
       {groups.map((g, gi) => {
         const pages = g.pages.filter((p) => p.id !== 'home');
         if (!pages.length) return null;
         return (
-          <Section key={g.name} n={gi + 2} title={g.name}>
+          <Section key={g.name} n={gi + 3} title={g.name}>
             <ul className="grid gap-px border border-rule bg-rule sm:grid-cols-2">
               {pages.map((p) => (
                 <li key={p.id} className="bg-paper">
