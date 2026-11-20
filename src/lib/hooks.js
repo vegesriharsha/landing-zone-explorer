@@ -16,6 +16,16 @@ export function useReducedMotion() {
   return reduced;
 }
 
+/** True when `value` has the same kind and, for objects, at least the keys of `model`. */
+export function sameShape(value, model) {
+  if (Array.isArray(model)) return Array.isArray(value);
+  if (model !== null && typeof model === 'object') {
+    if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+    return Object.keys(model).every((k) => k in value && sameShape(value[k], model[k]));
+  }
+  return typeof value === typeof model;
+}
+
 /**
  * useState that remembers its value in localStorage for this viewer.
  * Storage can be unavailable (private windows, blocked site data), so every
@@ -25,7 +35,10 @@ export function useLocalState(key, initial) {
   const [value, setValue] = useState(() => {
     try {
       const raw = window.localStorage.getItem(key);
-      return raw === null ? initial : JSON.parse(raw);
+      if (raw === null) return initial;
+      const parsed = JSON.parse(raw);
+      // An old or hand-edited value with the wrong shape would crash the page, so fall back to the default.
+      return sameShape(parsed, initial) ? parsed : initial;
     } catch {
       return initial;
     }

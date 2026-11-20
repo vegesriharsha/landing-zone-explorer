@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Layout from './components/Layout.jsx';
+import ErrorBoundary from './components/ErrorBoundary.jsx';
 import config from './pathway.config.js';
 import { pageById } from './content/registry.js';
 import Home from './archetypes/Home.jsx';
@@ -41,7 +42,9 @@ export default function App() {
   const Page = page.component ?? archetypes[page.archetype];
   return (
     <Layout current={id}>
-      <Page page={page} data={page.data} />
+      <ErrorBoundary resetKey={id}>
+        <Page page={page} data={page.data} />
+      </ErrorBoundary>
     </Layout>
   );
 }

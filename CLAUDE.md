@@ -10,7 +10,7 @@ this file before changing anything.
 | Layer | Use | Version (pinned in package.json) |
 | --- | --- | --- |
 | Runtime for builds | Node.js | 22.12 or later (CI uses 22) |
-| UI | React, function components and hooks only | react and react-dom 19.3.1 |
+| UI | React, function components and hooks only (one exception: `ErrorBoundary`, because React has no hook for it) | react and react-dom 19.3.1 |
 | Build and dev server | Vite with `@vitejs/plugin-react` | vite 8.3.4, plugin 6.1.2 |
 | Styling | Tailwind CSS v4 through `@tailwindcss/vite`; tokens in `src/index.css` via `@theme inline` | tailwindcss 4.3.3 |
 | Icons | lucide-react, imported one icon at a time | 1.59.0 |
@@ -39,7 +39,7 @@ Rules the stack implies:
 ```bash
 npm ci              # install exactly what package-lock.json says
 npm run dev         # http://localhost:5173, rebuilds on save
-npm run check       # every source key, page id and register source exists; add --urls to fetch every source URL
+npm run check       # every source key, page id and register source exists; add --urls to fetch every source URL, --stale to fail on dates past their cadence
 npm test            # vitest render smoke tests for the simulator pages
 npm run build       # static site in dist/
 npm run preview     # serve dist/ at http://localhost:4173
