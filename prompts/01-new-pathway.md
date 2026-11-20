@@ -7,7 +7,7 @@ Paste into a new coding session opened on this repo (or a copy of it). Replace t
 You're building an interactive learning and adoption pathway for **[TECHNOLOGY]** with this repo, the Pathway Kit.
 
 Read these first, in order: `CLAUDE.md`, `docs/archetypes.md`, `PATHWAY_SPEC.md`, then skim `src/content/` and
-`src/pages/RiskTier.jsx` to see a filled-in example of every archetype.
+`src/pages/PavedPaths.jsx` to see a filled-in example of every archetype.
 
 Then work in this order and show me the result of each step before moving on:
 
@@ -20,7 +20,7 @@ Then work in this order and show me the result of each step before moving on:
    sources it rests on. Prefer archetypes; propose a custom simulator only for the hardest ideas, naming its pattern
    from `docs/visual-patterns.md`. Build each custom simulator with `prompts/05-visualize-a-concept.md`.
 4. **Build.** Replace the kit's sample content: `pathway.config.js`, `registry.js`, one data file per archetype page,
-   custom pages copied from `RiskTier.jsx`. Keep the kit's sample files only if I ask.
+   custom pages copied from `PavedPaths.jsx`. Keep the kit's sample files only if I ask.
 5. **Check.** `npm run build`, then `npm run shots -- 390 dark all` and `npm run shots -- 1280 light all` with the
    preview running. Look at the screenshots of every page and fix overflow, overlaps and console errors.
 6. **Fact-check.** Start an independent reviewer with `prompts/03-fact-check.md` and apply its findings.

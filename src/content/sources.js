@@ -113,10 +113,6 @@ export const src = {
     title: 'Cloud security posture management in Defender for Cloud',
     url: 'https://learn.microsoft.com/azure/defender-for-cloud/concept-cloud-security-posture-management',
   },
-  tagPolicies: {
-    title: 'Assign policy definitions for tag compliance',
-    url: 'https://learn.microsoft.com/azure/azure-resource-manager/management/tag-policies',
-  },
   platformEng: {
     title: 'What is platform engineering? (Microsoft Learn)',
     url: 'https://learn.microsoft.com/platform-engineering/what-is-platform-engineering',
@@ -149,7 +145,6 @@ export const src = {
   },
   stateImporter: { title: 'Azure/terraform-state-importer', url: 'https://github.com/Azure/terraform-state-importer' },
   alzMigration: { title: 'ALZ Terraform migration guidance', url: 'https://azure.github.io/Azure-Landing-Zones/terraform/migration/' },
-  planning: { title: 'Accelerator Phase 0: planning', url: 'https://azure.github.io/Azure-Landing-Zones/accelerator/0_planning/' },
   permissionsFaq: { title: 'Accelerator permissions FAQ', url: 'https://azure.github.io/Azure-Landing-Zones/accelerator/faq/permissions/' },
   mgOptions: {
     title: 'Accelerator option: customise management group names and IDs',
@@ -162,10 +157,6 @@ export const src = {
   hcpOverview: { title: 'HCP Terraform plans and features', url: 'https://developer.hashicorp.com/terraform/cloud-docs/overview' },
   hcpPolicy: { title: 'HCP Terraform policy enforcement', url: 'https://developer.hashicorp.com/terraform/cloud-docs/policy-enforcement' },
   tfeReleases: { title: 'Terraform Enterprise 2.1.x release notes', url: 'https://developer.hashicorp.com/terraform/enterprise/releases/2.1.x' },
-  uamiFederated: {
-    title: 'Federated credentials on a user-assigned managed identity',
-    url: 'https://learn.microsoft.com/entra/workload-id/workload-identity-federation-create-trust-user-assigned-managed-identity',
-  },
   cafCsp: {
     title: 'CAF: Azure billing with a Cloud Solution Provider',
     url: 'https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/azure-billing-cloud-solution-provider',
@@ -208,7 +199,6 @@ export const src = {
   },
   mgManage: { title: 'Manage management groups (moving subscriptions)', url: 'https://learn.microsoft.com/azure/governance/management-groups/manage' },
   moveSupport: { title: 'Move support for Azure resources', url: 'https://learn.microsoft.com/azure/azure-resource-manager/management/move-support-resources' },
-  policyRule: { title: 'Azure Policy rule structure', url: 'https://learn.microsoft.com/azure/governance/policy/concepts/definition-structure-policy-rule' },
   policyLibraryAvm: { title: 'Azure/policy-library-avm', url: 'https://github.com/Azure/policy-library-avm' },
   remediation: {
     title: 'Remediate non-compliant resources with Azure Policy',
@@ -238,5 +228,4 @@ export const src = {
   retailPrices: { title: 'Azure Retail Prices API', url: 'https://learn.microsoft.com/rest/api/cost-management/retail-prices/azure-retail-prices' },
   monitorPricing: { title: 'Azure Monitor pricing', url: 'https://azure.microsoft.com/pricing/details/monitor/' },
   logsOverview: { title: 'Azure Monitor Logs overview: table plan comparison', url: 'https://learn.microsoft.com/azure/azure-monitor/logs/data-platform-logs' },
-  serviceHealth: { title: 'Service Health alerts', url: 'https://learn.microsoft.com/azure/service-health/alerts-activity-log-service-notifications-portal' },
 };

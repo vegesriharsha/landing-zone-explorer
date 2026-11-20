@@ -27,6 +27,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
+      - run: npm test
       - run: npm run build
       # Creates the Pages site (source: GitHub Actions) if the repository has none yet.
       - uses: actions/configure-pages@v6
