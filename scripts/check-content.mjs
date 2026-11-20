@@ -3,7 +3,9 @@
 //   - every page id used in a link, `explore` or `page` field exists in src/content/registry.js
 //   - every source in sources.js is cited somewhere (unused sources are a warning, not a failure)
 // With --urls it also fetches every source URL and reports anything that is not a 2xx or 3xx.
-// Usage: node scripts/check-content.mjs [--urls]
+// With --stale it also exits 1 when a verified date is past its cadence (without it, stale dates only warn,
+// so an unrelated push never fails on the calendar). --today YYYY-MM-DD overrides the date, for testing.
+// Usage: node scripts/check-content.mjs [--urls] [--stale] [--today YYYY-MM-DD]
 import fs from 'node:fs';
 
 const read = (p) => fs.readFileSync(p, 'utf8');
@@ -47,6 +49,27 @@ for (const f of files) {
   }
 }
 
+// Staleness: the monthly refresh (prompts/04-refresh.md) moves these dates. 35 days is a month plus slack.
+const DAY = 86_400_000;
+const todayArg = process.argv.indexOf('--today');
+const today = new Date(todayArg > -1 ? process.argv[todayArg + 1] : new Date().toISOString().slice(0, 10));
+const age = (d) => Math.floor((today - d) / DAY);
+const stale = [];
+const siteDate = (file, name) => {
+  const m = read(file).match(new RegExp(`export const ${name} = '([^']+)'`));
+  const d = m && new Date(`${m[1]} UTC`);
+  if (!d || Number.isNaN(d.getTime())) problems.push(`${file}: cannot read ${name}`);
+  else if (age(d) > 35) stale.push(`${name} is ${age(d)} days old (${m[1]}); refresh budget is 35`);
+};
+siteDate('src/content/sources.js', 'VERIFIED');
+siteDate('src/content/prices.js', 'PRICES_VERIFIED');
+const registerText = read('src/content/register.js');
+const cadence = Object.fromEntries([...registerText.match(/cadence: \{([^}]*)\}/)[1].matchAll(/(\w+): (\d+)/g)].map((m) => [m[1], Number(m[2])]));
+for (const m of registerText.matchAll(/name: '([^']+)'[^\n]*?status: '(\w+)'[^\n]*?verified: '(\d{4}-\d{2}-\d{2})'/g)) {
+  const days = age(new Date(`${m[3]}T00:00:00Z`));
+  if (cadence[m[2]] !== undefined && days > cadence[m[2]]) stale.push(`register '${m[1]}' (${m[2]}) checked ${days} days ago; cadence is ${cadence[m[2]]}`);
+}
+
 const unused = Object.keys(sources).filter((k) => !cited.has(k));
 
 if (process.argv.includes('--urls')) {
@@ -70,6 +93,12 @@ if (process.argv.includes('--urls')) {
 
 console.log(`${Object.keys(sources).length} sources, ${pageIds.size} pages, ${cited.size} source keys cited`);
 if (unused.length) console.log(`warning: ${unused.length} source(s) cited nowhere: ${unused.join(', ')}`);
+if (stale.length) {
+  const strict = process.argv.includes('--stale');
+  console.log(`${strict ? 'problem' : 'warning'}: ${stale.length} stale date(s):`);
+  for (const x of stale) console.log(`  ${x}`);
+  if (strict) problems.push(`${stale.length} stale date(s); run the monthly refresh (prompts/04-refresh.md)`);
+}
 if (problems.length) {
   console.error(`\n${problems.length} problem(s):`);
   for (const p of problems) console.error(`  ${p}`);

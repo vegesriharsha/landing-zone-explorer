@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import config from '../pathway.config.js';
 import { groups } from '../content/registry.js';
@@ -45,10 +45,35 @@ function Wordmark() {
 
 export default function Layout({ current, children }) {
   const [open, setOpen] = useState(false);
+  const mainRef = useRef(null);
+  const firstRender = useRef(true);
   useEffect(() => setOpen(false), [current]);
+
+  // After a page change, move focus to the content so keyboard and screen-reader users
+  // land on the new page. Not on first load, which would take the first Tab away.
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+    mainRef.current?.focus({ preventScroll: true });
+  }, [current]);
+
+  // A plain #main link would change the hash route, so focus the region directly.
+  const skip = (e) => {
+    e.preventDefault();
+    mainRef.current?.focus();
+  };
 
   return (
     <div className="min-h-screen bg-paper">
+      <a
+        href="#main-content"
+        onClick={skip}
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:border focus:border-rule focus:bg-paper focus:px-3 focus:py-2 focus:text-[14px] focus:text-ink"
+      >
+        Skip to content
+      </a>
       <div className="gutter sticky z-20 flex items-center justify-between border-b border-rule bg-paper py-3 lg:hidden" style={{ top: 'env(safe-area-inset-top, 0px)' }}>
         <Wordmark />
         <button
@@ -79,7 +104,7 @@ export default function Layout({ current, children }) {
           </div>
         </aside>
 
-        <main className="gutter min-w-0 flex-1 pb-24 pt-10 sm:pt-[72px] lg:px-14">
+        <main id="main-content" ref={mainRef} tabIndex={-1} className="gutter min-w-0 flex-1 pb-24 pt-10 outline-none sm:pt-[72px] lg:px-14">
           <div className="mx-auto max-w-[1080px] lg:mx-0">{children}</div>
           <p className="mx-auto mt-16 max-w-[1080px] border-t border-faint pt-4 text-[12px] text-subtle lg:mx-0">
             {config.siteName} · {config.edition} · rev {config.rev} · {config.footer}
