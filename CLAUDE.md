@@ -47,6 +47,9 @@ npm run shots -- 390 dark all     # screenshots + overflow + console-error check
 npm run shots -- 1280 light all
 ```
 
+Lint workflow changes with `actionlint` (dev-only, not an npm package; 1.7.12 from github.com/rhysd/actionlint
+releases, verify the checksum file) before pushing an edit to `.github/workflows/`.
+
 `npm run shots` needs Playwright (`npm i -D playwright && npx playwright install chromium`) unless it is already installed.
 
 ## Where things live
