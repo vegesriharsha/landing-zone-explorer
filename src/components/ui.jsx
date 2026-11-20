@@ -153,14 +153,15 @@ export function Segmented({ label, value, options, onChange, size = 'md' }) {
   );
 }
 
-export function Toggle({ label, checked, onChange, hint }) {
+export function Toggle({ label, checked, onChange, hint, disabled = false }) {
   return (
     <button
       type="button"
       role="switch"
       aria-checked={checked}
+      disabled={disabled}
       onClick={() => onChange(!checked)}
-      className="group flex w-full items-start gap-3 text-left"
+      className="group flex w-full items-start gap-3 text-left disabled:cursor-not-allowed disabled:opacity-60"
     >
       <span
         className={`mt-[3px] inline-flex h-[18px] w-[32px] shrink-0 items-center border transition-colors ${

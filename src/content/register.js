@@ -44,5 +44,11 @@ export default {
     { name: 'Azure Deployment Environments', cat: 'Self-service', status: 'Retiring', version: '—', verified: '2026-11-11', note: 'Retires on 22 February 2027. Read the retirement guide before choosing a self-service front end.', src: 'adeRetire' },
     { name: 'Reservation exchange rules', cat: 'Cost', status: 'Watch', version: '—', verified: '2026-11-11', note: 'Exchange rights change for some services; confirm before buying.', src: 'reservationExchange' },
     { name: 'Retail prices used on this site', cat: 'Cost', status: 'Watch', version: 'East US 2 list', verified: '2026-11-11', note: 'Lab and log prices read from the Retail Prices API.', src: 'retailPrices' },
+    { name: 'Azure Site Recovery (Azure-to-Azure)', cat: 'Operations', status: 'Adopt', version: '—', verified: '2026-11-20', note: 'CAF recommends it for virtual machine disaster recovery; recovery plans support region-to-region replication.', src: 'siteRecovery' },
+    { name: 'Azure Backup immutable vault', cat: 'Operations', status: 'Adopt', version: '—', verified: '2026-11-20', note: 'Enabled and locked immutability is generally available in all Azure public regions; locking cannot be undone.', src: 'immutableVault' },
+    { name: 'Site Recovery for Azure Extended Zones', cat: 'Operations', status: 'Hold', version: 'Preview', verified: '2026-11-20', note: 'Microsoft marks Site Recovery for Extended Zones as preview. Don’t build on it.', src: 'siteRecovery' },
+    { name: 'Microsoft Entra PIM (Azure resource roles)', cat: 'Security', status: 'Adopt', version: '—', verified: '2026-11-20', note: 'Eligible and active assignments with time-bound activation; needs licences.', src: 'pimOverview' },
+    { name: 'Microsoft Entra Conditional Access', cat: 'Security', status: 'Adopt', version: '—', verified: '2026-11-20', note: 'Needs Entra ID P1; risk-based policies need Entra ID Protection. Targeting agents is preview.', src: 'caOverview' },
+    { name: 'PIM preview features (app roles, agent access)', cat: 'Security', status: 'Hold', version: 'Preview', verified: '2026-11-20', note: 'Marked preview on the PIM pages. Don’t build on them.', src: 'pimOverview' },
   ],
 };

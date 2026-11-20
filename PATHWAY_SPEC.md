@@ -87,6 +87,8 @@ The Capability sequencer page (`src/content/sequencer.js`) is the source for thi
 | Compliance dashboard | custom | Audit first, enforce when the numbers say so |
 | Billing and cost | custom | Make the subscription the unit of cost |
 | Paved paths | custom | Most of a ticket's life is waiting |
+| Resilience and recovery | custom | Zones, regions and backups protect against different things |
+| Identity and access | custom | Access flows down the hierarchy, so assign it low and make it temporary |
 | Lab cost meter | custom | How far free credits take you |
 | Technology register | register | Everything we rely on, and when we last checked |
 

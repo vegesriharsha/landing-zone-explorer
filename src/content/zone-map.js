@@ -1,7 +1,7 @@
 // Layout data for the Home map. Labels for linked boxes come from the page registry, so
 // only page ids and positions live here; each page appears once. Coordinates are in the
 // viewBox below. `page` is checked by scripts/check-content.mjs against the real page ids.
-export const mapSize = { w: 1000, h: 640 };
+export const mapSize = { w: 1000, h: 700 };
 
 // Boxes that open a page. `hint` is a second line saying where the page's subject sits.
 export const boxes = [
@@ -28,6 +28,8 @@ export const boxes = [
   { page: 'billing', x: 408, y: 560, w: 184, h: 44 },
   { page: 'paved-paths', x: 602, y: 560, w: 184, h: 44 },
   { page: 'register', x: 796, y: 560, w: 184, h: 44 },
+  { page: 'resilience', x: 20, y: 620, w: 184, h: 44 },
+  { page: 'identity', x: 214, y: 620, w: 184, h: 44 },
 ];
 
 // Management groups drawn as plain labels (they are the subject of the hierarchy page).
