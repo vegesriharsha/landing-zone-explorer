@@ -57,13 +57,13 @@ export const groups = [
       { id: 'guardrails', title: 'Compliance dashboard', kind: 'Dashboard', component: Guardrails, blurb: 'A mock platform dashboard: compliance, secure score, budgets and when to switch policy to enforce.' },
       { id: 'billing', title: 'Billing and cost', kind: 'Explorer', component: Billing, blurb: 'How CSP, MCA and EA billing are structured and how a steady estate keeps costs down.' },
       { id: 'paved-paths', title: 'Paved paths', kind: 'Animated flow', component: PavedPaths, blurb: 'Race a ticket queue against a paved path and see where the days go.' },
+      { id: 'register', title: 'Technology register', kind: 'Dashboard', archetype: 'register', data: register, blurb: 'Every component, its status and when it was last verified. Filter for what needs attention.' },
     ],
   },
   {
     name: 'Practice',
     pages: [
       { id: 'lab-cost', title: 'Lab cost meter', kind: 'Dashboard', component: LabCost, blurb: 'Plan a personal lab on free credits: switch components on and off and watch the credit burn.' },
-      { id: 'register', title: 'Technology register', kind: 'Dashboard', archetype: 'register', data: register, blurb: 'Every component, its status and when it was last verified. Filter for what needs attention.' },
     ],
   },
 ];

@@ -92,7 +92,7 @@ The Capability sequencer page (`src/content/sequencer.js`) is the source for thi
 
 ## 8. Practice
 
-Not built yet. Candidate levels: Azure CLI (list management groups, summarise policy state, move a subscription),
+The `practice` archetype exists in the kit but no levels are built yet, so the nav group holds only the lab cost meter. Candidate levels: Azure CLI (list management groups, summarise policy state, move a subscription),
 Terraform (init, plan, import, state list), KQL on AzureActivity, git (branch, pull request). Phone-first, hints not
 answers.
 
